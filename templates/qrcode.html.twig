@@ -32,10 +32,10 @@
         {{ __('QR code could not be generated:', 'assetqr') }} {{ error }}
     </div>
 {% else %}
-    <style>.assetqr-qrcode-image svg { width: 100%; height: auto; }</style>
     <div class="assetqr-qrcode text-center">
         <div class="assetqr-qrcode-image mx-auto mb-3" style="max-width: 320px">
-            {{ svg|raw }}
+            {# SVG embedded as an image: markup inside it can never be interpreted by the page #}
+            <img class="w-100 h-auto" src="data:image/svg+xml;base64,{{ svg }}" alt="{{ text }}" />
         </div>
         <pre class="text-start bg-light border rounded p-2 mb-3" style="white-space: pre-wrap">{{ text }}</pre>
         <div class="d-flex justify-content-center gap-2">

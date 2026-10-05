@@ -35,19 +35,34 @@ global $CFG_GLPI;
 
 Session::checkRight('config', UPDATE);
 
+$form_url  = $CFG_GLPI['root_doc'] . '/plugins/assetqr/front/config.form.php';
 $itemtypes = array_values(array_filter(
     $CFG_GLPI['asset_types'],
     fn(string $itemtype) => getItemForItemtype($itemtype) !== false,
 ));
 
 if (isset($_POST['update'])) {
-    $values = ['template_default' => trim($_POST['template_default'] ?? '')];
-    foreach ($itemtypes as $index => $itemtype) {
-        $values[QrCode::getConfigKey($itemtype)] = trim($_POST['templates'][$index] ?? '');
+    $posted    = is_array($_POST['templates'] ?? null) ? $_POST['templates'] : [];
+    $as_string = static fn(mixed $value): string => is_string($value) ? trim($value) : '';
+
+    // Templates are keyed by itemtype; anything not in the list of asset types is ignored
+    $values = ['template_default' => $as_string($_POST['template_default'] ?? '')];
+    foreach ($itemtypes as $itemtype) {
+        $values[QrCode::getConfigKey($itemtype)] = $as_string($posted[$itemtype] ?? '');
     }
-    Config::setConfigurationValues(QrCode::CONFIG_CONTEXT, $values);
-    Session::addMessageAfterRedirect(__('Configuration updated successfully'));
-    Html::back();
+
+    $too_long = array_filter($values, fn(string $value) => mb_strlen($value) > QrCode::TEMPLATE_MAX_LENGTH);
+    if ($too_long !== []) {
+        Session::addMessageAfterRedirect(
+            sprintf(__('A template must not be longer than %d characters.', 'assetqr'), QrCode::TEMPLATE_MAX_LENGTH),
+            false,
+            ERROR,
+        );
+    } else {
+        Config::setConfigurationValues(QrCode::CONFIG_CONTEXT, $values);
+        Session::addMessageAfterRedirect(__('Configuration updated successfully'));
+    }
+    Html::redirect($form_url);
 }
 
 $config = Config::getConfigurationValues(QrCode::CONFIG_CONTEXT);
@@ -64,7 +79,8 @@ foreach ($itemtypes as $itemtype) {
 
 Html::header(__('QR code', 'assetqr'), '', 'config', 'plugin');
 TemplateRenderer::getInstance()->display('@assetqr/config.html.twig', [
-    'action'           => $_SERVER['PHP_SELF'],
+    'action'           => $form_url,
+    'max_length'       => QrCode::TEMPLATE_MAX_LENGTH,
     'template_default' => $config['template_default'] ?? QrCode::getDefaultTemplate(),
     'types'            => $types,
 ]);

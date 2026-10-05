@@ -35,7 +35,6 @@ use Com\Tecnick\Barcode\Barcode;
 use Config;
 use Dropdown;
 use Entity;
-use Html;
 
 /**
  * Generates QR codes for assets from a configurable text template.
@@ -50,6 +49,12 @@ class QrCode
 
     /** Placeholders that do not come from a table column. */
     public const SPECIAL_PLACEHOLDERS = ['id', 'itemtype', 'url', 'entity'];
+
+    /** Maximum length of a template; a QR code holds about 2300 characters at most. */
+    public const TEMPLATE_MAX_LENGTH = 2000;
+
+    /** Columns that must never be encoded, whatever the template says. */
+    private const SENSITIVE_COLUMN_PATTERN = '/pass|secret|token|private|api_?key|cookie/i';
 
     /** Default template, with labels in the current user's language. */
     public static function getDefaultTemplate(): string
@@ -116,10 +121,11 @@ class QrCode
             case 'url':
                 return $CFG_GLPI['url_base'] . $item::getFormURLWithID($item->getID(), false);
             case 'entity':
-                return Dropdown::getDropdownName(Entity::getTable(), (int) ($item->fields['entities_id'] ?? 0), tooltip: false);
+                $name = Dropdown::getDropdownName(Entity::getTable(), (int) ($item->fields['entities_id'] ?? 0), tooltip: false);
+                return html_entity_decode(trim($name), ENT_QUOTES);
         }
 
-        if (!array_key_exists($key, $item->fields)) {
+        if (!self::isAllowedColumn($key) || !array_key_exists($key, $item->fields)) {
             return '';
         }
 
@@ -152,8 +158,13 @@ class QrCode
     {
         global $DB;
 
-        $columns = array_keys($DB->listFields($itemtype::getTable()));
+        $columns = array_filter(array_keys($DB->listFields($itemtype::getTable())), self::isAllowedColumn(...));
         return array_values(array_unique(array_merge(self::SPECIAL_PLACEHOLDERS, $columns)));
+    }
+
+    private static function isAllowedColumn(string $column): bool
+    {
+        return preg_match(self::SENSITIVE_COLUMN_PATTERN, $column) !== 1;
     }
 
     /**
@@ -182,10 +193,10 @@ class QrCode
             . '<button type="button" class="btn btn-outline-secondary assetqr-qrcode-btn"'
             . ' data-itemtype="%s" data-items-id="%d" data-title="%s">'
             . '<i class="ti ti-qrcode"></i><span>%s</span></button></div>',
-            Html::entities_deep($item::class),
+            htmlescape($item::class),
             $item->getID(),
-            Html::entities_deep(sprintf('%s – %s', $label, $item->getNameID())),
-            Html::entities_deep($label),
+            htmlescape(sprintf('%s – %s', $label, $item->getNameID())),
+            htmlescape($label),
         );
     }
 }

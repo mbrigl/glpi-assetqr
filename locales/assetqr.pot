@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assetqr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-05 18:42+0000\n"
+"POT-Creation-Date: 2026-10-05 19:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: front/config.form.php:65 src/QrCode.php:179
+#: front/config.form.php:57
+#, php-format
+msgid "A template must not be longer than %d characters."
+msgstr ""
+
+#: front/config.form.php:80 src/QrCode.php:190
 msgid "QR code"
 msgstr ""
 
-#: src/QrCode.php:59
+#: src/QrCode.php:64
 msgid "Serial number"
 msgstr ""
 
-#: src/QrCode.php:60
+#: src/QrCode.php:65
 msgid "Inventory number"
 msgstr ""
 

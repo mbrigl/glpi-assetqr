@@ -39,7 +39,7 @@
             </p>
 
             <label class="form-label fw-bold" for="template_default">{{ __('Default template', 'assetqr') }}</label>
-            <textarea class="form-control font-monospace mb-1" rows="7" id="template_default" name="template_default">{{ template_default }}</textarea>
+            <textarea class="form-control font-monospace mb-1" rows="7" id="template_default" name="template_default" maxlength="{{ max_length }}">{{ template_default }}</textarea>
             <div class="form-hint mb-4">{{ __('Used for all asset types without their own template.', 'assetqr') }}</div>
 
             {% set empty_hint = __('Empty = use default template', 'assetqr') %}
@@ -57,7 +57,7 @@
                         </h2>
                         <div id="assetqr-type-{{ loop.index0 }}" class="accordion-collapse collapse" data-bs-parent="#assetqr-templates">
                             <div class="accordion-body">
-                                <textarea class="form-control font-monospace mb-2" rows="5" name="templates[{{ loop.index0 }}]"
+                                <textarea class="form-control font-monospace mb-2" rows="5" name="templates[{{ type.itemtype }}]" maxlength="{{ max_length }}"
                                     placeholder="{{ empty_hint }}">{{ type.template }}</textarea>
                                 <div class="small text-muted">
                                     {{ __('Available placeholders:', 'assetqr') }}

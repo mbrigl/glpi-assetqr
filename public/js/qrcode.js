@@ -26,7 +26,7 @@
  * -------------------------------------------------------------------------
  */
 
-/* global CFG_GLPI, glpi_ajax_dialog */
+/* global CFG_GLPI, glpi_ajax_dialog, _ */
 
 $(document).on('click', '.assetqr-qrcode-btn', function () {
     const btn = $(this);
@@ -34,27 +34,44 @@ $(document).on('click', '.assetqr-qrcode-btn', function () {
         url: `${CFG_GLPI.root_doc}/plugins/assetqr/ajax/qrcode.php`,
         method: 'get',
         params: {
-            itemtype: btn.data('itemtype'),
-            items_id: btn.data('items-id'),
+            itemtype: btn.attr('data-itemtype'),
+            items_id: btn.attr('data-items-id'),
         },
-        title: btn.data('title'),
+        // glpi_ajax_dialog inserts the title as HTML: escape the asset name
+        title: _.escape(btn.attr('data-title')),
     });
 });
 
 $(document).on('click', '.assetqr-qrcode-print', function () {
     const container = $(this).closest('.assetqr-qrcode');
+    const image = container.find('.assetqr-qrcode-image img').get(0);
+    if (!image) {
+        return;
+    }
     const win = window.open('', '_blank', 'width=500,height=600');
     if (!win) {
         return;
     }
-    win.document.write(`<!doctype html><html><head><title></title>
-        <style>body{font-family:sans-serif;text-align:center;margin:2em}
-        svg{width:60mm;height:auto}pre{text-align:left;display:inline-block;white-space:pre-wrap}</style>
-        </head><body>${container.find('.assetqr-qrcode-image').html()}
-        <br><pre></pre></body></html>`);
-    win.document.title = $(this).data('title');
-    win.document.querySelector('pre').textContent = container.find('pre').text();
-    win.document.close();
-    win.focus();
-    win.print();
+
+    // Build the print page from DOM nodes only, never from HTML strings
+    const doc = win.document;
+    doc.open();
+    doc.write('<!doctype html><html><head></head><body></body></html>');
+    doc.close();
+    doc.title = $(this).attr('data-title');
+
+    const style = doc.createElement('style');
+    style.textContent = 'body{font-family:sans-serif;text-align:center;margin:2em}'
+        + 'img{width:60mm;height:auto}pre{text-align:left;display:inline-block;white-space:pre-wrap}';
+    doc.head.append(style);
+
+    const img = doc.createElement('img');
+    const pre = doc.createElement('pre');
+    pre.textContent = container.find('pre').text();
+    img.addEventListener('load', () => {
+        win.focus();
+        win.print();
+    });
+    img.src = image.src;
+    doc.body.append(img, doc.createElement('br'), pre);
 });

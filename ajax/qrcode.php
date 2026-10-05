@@ -28,6 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
+use Com\Tecnick\Barcode\Exception as BarcodeException;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Exception\Http\BadRequestHttpException;
 use Glpi\Exception\Http\NotFoundHttpException;
@@ -35,28 +36,28 @@ use GlpiPlugin\Assetqr\QrCode;
 
 Session::checkLoginUser();
 
-$itemtype = $_GET['itemtype'] ?? '';
-$items_id = (int) ($_GET['items_id'] ?? 0);
+$itemtype = $_GET['itemtype'] ?? null;
+$items_id = filter_var($_GET['items_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 
-if (!QrCode::isSupported($itemtype)) {
+if (!is_string($itemtype) || $items_id === false || !QrCode::isSupported($itemtype)) {
     throw new BadRequestHttpException();
 }
 
+// Same response for "does not exist" and "not allowed", so IDs cannot be probed
 $item = getItemForItemtype($itemtype);
-if (!$item || !$item->getFromDB($items_id)) {
+if (!$item || !$item->getFromDB($items_id) || !$item->can($items_id, READ)) {
     throw new NotFoundHttpException();
 }
-$item->check($items_id, READ);
 
 $text  = QrCode::buildText($item);
 $error = null;
 $svg   = $png = null;
 try {
     $qrcode = QrCode::generate($text);
-    $svg    = $qrcode->getInlineSvgCode();
+    $svg    = base64_encode($qrcode->getSvgCode());
     $png    = base64_encode($qrcode->getPngData());
-} catch (Throwable $e) {
-    // e.g. text too long for a QR code
+} catch (BarcodeException $e) {
+    // Data errors of the QR code library, e.g. text too long for a QR code
     $error = $e->getMessage();
 }
 
