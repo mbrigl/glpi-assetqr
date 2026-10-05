@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <name>Asset QR Codes</name>
+    <key>assetqr</key>
+    <state>beta</state>
+    <logo>https://raw.githubusercontent.com/mbrigl/glpi-assetqr/main/assetqr.png</logo>
+    <description>
+        <short>
+            <en>Adds a QR code button to every asset. The encoded text is built from a configurable template of asset fields.</en>
+            <de>Fügt jedem Asset einen QR-Code-Button hinzu. Der kodierte Text wird aus einer konfigurierbaren Vorlage mit Asset-Feldern erzeugt.</de>
+            <fr>Ajoute un bouton de code QR à chaque actif. Le texte encodé est construit à partir d'un modèle configurable de champs de l'actif.</fr>
+            <it>Aggiunge un pulsante per il codice QR a ogni asset. Il testo codificato viene generato da un modello configurabile di campi dell'asset.</it>
+            <es>Añade un botón de código QR a cada activo. El texto codificado se genera a partir de una plantilla configurable de campos del activo.</es>
+        </short>
+        <long>
+            <en><![CDATA[
+Adds a **QR code** button to the form of every asset (computers, monitors, printers, network equipment, … including custom asset types).
+
+Clicking the button opens a dialog with the QR code, the encoded text and actions to **download it as PNG** or **print** it.
+
+### Configurable content
+The encoded text is defined by a template, globally and optionally per asset type:
+
+```
+{itemtype}: {name}
+Serial number: {serial}
+Manufacturer: {manufacturers_id}
+{url}
+```
+
+- `{column}`: any field of the asset; foreign keys such as `{manufacturers_id}`, `{locations_id}` or `{users_id}` are resolved to their names
+- `{id}`, `{itemtype}`, `{url}` (link to the asset) and `{entity}`
+- Lines that are empty after substitution are dropped
+
+Respects GLPI rights: the QR code is only available to users who can read the asset.
+]]></en>
+            <de><![CDATA[
+Fügt dem Formular jedes Assets (Computer, Monitore, Drucker, Netzwerkgeräte, … auch eigene Asset-Typen) einen **QR-Code**-Button hinzu.
+
+Ein Klick öffnet einen Dialog mit dem QR-Code, dem kodierten Text sowie den Aktionen **PNG herunterladen** und **Drucken**.
+
+### Konfigurierbarer Inhalt
+Der kodierte Text wird über eine Vorlage festgelegt, global und optional pro Asset-Typ:
+
+```
+{itemtype}: {name}
+Seriennummer: {serial}
+Hersteller: {manufacturers_id}
+{url}
+```
+
+- `{spalte}`: jedes Feld des Assets; Fremdschlüssel wie `{manufacturers_id}`, `{locations_id}` oder `{users_id}` werden zum Namen aufgelöst
+- `{id}`, `{itemtype}`, `{url}` (Link zum Asset) und `{entity}`
+- Zeilen, die nach dem Ersetzen leer sind, entfallen
+
+Berücksichtigt die GLPI-Rechte: Der QR-Code steht nur Benutzern zur Verfügung, die das Asset lesen dürfen.
+]]></de>
+            <fr><![CDATA[
+Ajoute un bouton **code QR** au formulaire de chaque actif (ordinateurs, moniteurs, imprimantes, matériels réseau, … y compris les types d'actifs personnalisés).
+
+Un clic ouvre une fenêtre avec le code QR, le texte encodé et les actions **Télécharger en PNG** et **Imprimer**.
+
+### Contenu configurable
+Le texte encodé est défini par un modèle, global et optionnellement par type d'actif :
+
+```
+{itemtype}: {name}
+Numéro de série: {serial}
+Fabricant: {manufacturers_id}
+{url}
+```
+
+- `{colonne}` : tout champ de l'actif ; les clés étrangères comme `{manufacturers_id}`, `{locations_id}` ou `{users_id}` sont remplacées par leur nom
+- `{id}`, `{itemtype}`, `{url}` (lien vers l'actif) et `{entity}`
+- Les lignes vides après substitution sont supprimées
+
+Respecte les droits GLPI : le code QR n'est disponible que pour les utilisateurs pouvant lire l'actif.
+]]></fr>
+            <it><![CDATA[
+Aggiunge un pulsante **codice QR** al modulo di ogni asset (computer, monitor, stampanti, dispositivi di rete, … inclusi i tipi di asset personalizzati).
+
+Un clic apre una finestra con il codice QR, il testo codificato e le azioni **Scarica PNG** e **Stampa**.
+
+### Contenuto configurabile
+Il testo codificato è definito da un modello, globale e facoltativamente per tipo di asset:
+
+```
+{itemtype}: {name}
+Numero di serie: {serial}
+Produttore: {manufacturers_id}
+{url}
+```
+
+- `{colonna}`: qualsiasi campo dell'asset; le chiavi esterne come `{manufacturers_id}`, `{locations_id}` o `{users_id}` vengono sostituite dai rispettivi nomi
+- `{id}`, `{itemtype}`, `{url}` (link all'asset) e `{entity}`
+- Le righe vuote dopo la sostituzione vengono rimosse
+
+Rispetta i diritti di GLPI: il codice QR è disponibile solo per gli utenti che possono leggere l'asset.
+]]></it>
+            <es><![CDATA[
+Añade un botón de **código QR** al formulario de cada activo (ordenadores, monitores, impresoras, equipos de red, … incluidos los tipos de activo personalizados).
+
+Un clic abre un diálogo con el código QR, el texto codificado y las acciones **Descargar PNG** e **Imprimir**.
+
+### Contenido configurable
+El texto codificado se define mediante una plantilla, global y opcionalmente por tipo de activo:
+
+```
+{itemtype}: {name}
+Número de serie: {serial}
+Fabricante: {manufacturers_id}
+{url}
+```
+
+- `{columna}`: cualquier campo del activo; las claves externas como `{manufacturers_id}`, `{locations_id}` o `{users_id}` se sustituyen por sus nombres
+- `{id}`, `{itemtype}`, `{url}` (enlace al activo) y `{entity}`
+- Las líneas vacías tras la sustitución se eliminan
+
+Respeta los permisos de GLPI: el código QR solo está disponible para los usuarios que pueden ver el activo.
+]]></es>
+        </long>
+    </description>
+    <homepage>https://github.com/mbrigl/glpi-assetqr</homepage>
+    <download>https://github.com/mbrigl/glpi-assetqr/releases</download>
+    <issues>https://github.com/mbrigl/glpi-assetqr/issues</issues>
+    <readme>https://github.com/mbrigl/glpi-assetqr/blob/main/README.md</readme>
+    <authors>
+        <author>Markus Brigl</author>
+    </authors>
+    <versions>
+        <version>
+            <num>0.1.0</num>
+            <compatibility>~11.0.0</compatibility>
+            <download_url>https://github.com/mbrigl/glpi-assetqr/releases/download/v0.1.0/assetqr-0.1.0.tar.bz2</download_url>
+        </version>
+    </versions>
+    <langs>
+        <lang>de_DE</lang>
+        <lang>en_GB</lang>
+        <lang>es_ES</lang>
+        <lang>fr_FR</lang>
+        <lang>it_IT</lang>
+    </langs>
+    <license>GPL v3+</license>
+    <tags>
+        <en>
+            <tag>QR code</tag>
+            <tag>Asset</tag>
+            <tag>Inventory</tag>
+            <tag>Label</tag>
+        </en>
+        <de>
+            <tag>QR-Code</tag>
+            <tag>Asset</tag>
+            <tag>Inventar</tag>
+            <tag>Etikett</tag>
+        </de>
+        <fr>
+            <tag>Code QR</tag>
+            <tag>Actif</tag>
+            <tag>Inventaire</tag>
+            <tag>Étiquette</tag>
+        </fr>
+        <it>
+            <tag>Codice QR</tag>
+            <tag>Asset</tag>
+            <tag>Inventario</tag>
+            <tag>Etichetta</tag>
+        </it>
+        <es>
+            <tag>Código QR</tag>
+            <tag>Activo</tag>
+            <tag>Inventario</tag>
+            <tag>Etiqueta</tag>
+        </es>
+    </tags>
+    <screenshots>
+        <screenshot>https://raw.githubusercontent.com/mbrigl/glpi-assetqr/main/screenshots/2-qrcode-dialog.png</screenshot>
+        <screenshot>https://raw.githubusercontent.com/mbrigl/glpi-assetqr/main/screenshots/1-asset-form.png</screenshot>
+        <screenshot>https://raw.githubusercontent.com/mbrigl/glpi-assetqr/main/screenshots/3-configuration.png</screenshot>
+    </screenshots>
+</root>

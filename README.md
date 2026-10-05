@@ -5,6 +5,8 @@ configurable template of asset fields.
 
 ## Feature: QR codes for assets
 
+![QR code dialog](screenshots/2-qrcode-dialog.png)
+
 Every asset form (computers, monitors, printers, … including custom asset types) gets a **QR code** button below the form.
 It opens a dialog with the QR code, the encoded text, and "Download PNG" / "Print" actions.
 
@@ -65,6 +67,19 @@ composer lint        # PHP syntax check
 composer cs          # coding standard (PER-CS 2.0, as GLPI); composer cs-fix to fix
 ```
 The same checks run on GitHub for every push and pull request (`.github/workflows/ci.yml`).
+
+## Release
+1. Bump `PLUGIN_ASSETQR_VERSION` in `setup.php` and add the version to `assetqr.xml`
+   (`<num>`, `<compatibility>`, `<download_url>`).
+2. Commit, then tag and push: `git tag v0.1.0 && git push origin main v0.1.0`
+3. The GitHub workflow `.github/workflows/release.yml` builds `assetqr-<version>.tar.bz2`
+   with `tools/release.sh` and attaches it to the GitHub release.
+
+The archive contains a single `assetqr/` directory; files marked `export-ignore` in
+`.gitattributes` (devcontainer, tools, CI) are excluded. Build locally with `tools/release.sh`.
+
+The plugins catalog reads `assetqr.xml` from
+`https://raw.githubusercontent.com/mbrigl/glpi-assetqr/main/assetqr.xml`.
 
 ## Renaming the plugin
 The plugin name (lowercase letters/digits only) must be identical everywhere:
