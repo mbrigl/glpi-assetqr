@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: PHP syntax
+        run: composer lint
+
+      - name: Coding standard
+        run: composer cs
+
+      - name: Translations compile
+        run: |
+          sudo apt-get update && sudo apt-get install -y gettext
+          tools/locales.sh compile
+          git diff --exit-code -- locales || (echo "locales/*.mo are out of date: run tools/locales.sh compile" && exit 1)

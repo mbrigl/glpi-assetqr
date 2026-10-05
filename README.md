@@ -58,6 +58,14 @@ tail -f /var/log/glpi/php-errors.log
 Xdebug only starts on trigger: use the "Xdebug Helper" browser extension
 or append `?XDEBUG_TRIGGER=1` to the URL, then start "Xdebug: Listen" in VS Code.
 
+## Development checks
+```bash
+composer install     # dev tools (php-cs-fixer)
+composer lint        # PHP syntax check
+composer cs          # coding standard (PER-CS 2.0, as GLPI); composer cs-fix to fix
+```
+The same checks run on GitHub for every push and pull request (`.github/workflows/ci.yml`).
+
 ## Renaming the plugin
 The plugin name (lowercase letters/digits only) must be identical everywhere:
 - `docker-compose.yml`: mount target `/var/www/glpi/plugins/<name>`
