@@ -1,0 +1,52 @@
+{#
+ # -------------------------------------------------------------------------
+ # Asset QR Codes plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of Asset QR Codes.
+ #
+ # Asset QR Codes is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # Asset QR Codes is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with Asset QR Codes. If not, see <https://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2026 by Markus Brigl.
+ # @license   GPLv3+ https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://github.com/mbrigl/glpi-assetqr
+ # -------------------------------------------------------------------------
+ #}
+
+{% if error %}
+    <div class="alert alert-danger mb-0">
+        <i class="ti ti-alert-triangle me-1"></i>
+        {{ __('QR code could not be generated:', 'assetqr') }} {{ error }}
+    </div>
+{% else %}
+    <style>.assetqr-qrcode-image svg { width: 100%; height: auto; }</style>
+    <div class="assetqr-qrcode text-center">
+        <div class="assetqr-qrcode-image mx-auto mb-3" style="max-width: 320px">
+            {{ svg|raw }}
+        </div>
+        <pre class="text-start bg-light border rounded p-2 mb-3" style="white-space: pre-wrap">{{ text }}</pre>
+        <div class="d-flex justify-content-center gap-2">
+            <a class="btn btn-primary" href="data:image/png;base64,{{ png }}" download="{{ filename }}">
+                <i class="ti ti-download"></i>
+                <span>{{ __('Download PNG', 'assetqr') }}</span>
+            </a>
+            <button type="button" class="btn btn-outline-secondary assetqr-qrcode-print" data-title="{{ __('QR code', 'assetqr') }}">
+                <i class="ti ti-printer"></i>
+                <span>{{ __('Print') }}</span>
+            </button>
+        </div>
+    </div>
+{% endif %}

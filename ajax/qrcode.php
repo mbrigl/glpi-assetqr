@@ -28,26 +28,42 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
+use Glpi\Exception\Http\BadRequestHttpException;
+use Glpi\Exception\Http\NotFoundHttpException;
 use GlpiPlugin\Assetqr\QrCode;
 
-/**
- * Installation: create tables, initialize rights/configuration.
- */
-function plugin_assetqr_install(): bool
-{
-    $config = Config::getConfigurationValues(QrCode::CONFIG_CONTEXT, ['template_default']);
-    if (!isset($config['template_default'])) {
-        Config::setConfigurationValues(QrCode::CONFIG_CONTEXT, ['template_default' => QrCode::getDefaultTemplate()]);
-    }
-    return true;
+Session::checkLoginUser();
+
+$itemtype = $_GET['itemtype'] ?? '';
+$items_id = (int) ($_GET['items_id'] ?? 0);
+
+if (!QrCode::isSupported($itemtype)) {
+    throw new BadRequestHttpException();
 }
 
-/**
- * Uninstallation: remove everything again.
- */
-function plugin_assetqr_uninstall(): bool
-{
-    $config = new Config();
-    $config->deleteByCriteria(['context' => QrCode::CONFIG_CONTEXT]);
-    return true;
+$item = getItemForItemtype($itemtype);
+if (!$item || !$item->getFromDB($items_id)) {
+    throw new NotFoundHttpException();
 }
+$item->check($items_id, READ);
+
+$text  = QrCode::buildText($item);
+$error = null;
+$svg   = $png = null;
+try {
+    $qrcode = QrCode::generate($text);
+    $svg    = $qrcode->getInlineSvgCode();
+    $png    = base64_encode($qrcode->getPngData());
+} catch (Throwable $e) {
+    // e.g. text too long for a QR code
+    $error = $e->getMessage();
+}
+
+TemplateRenderer::getInstance()->display('@assetqr/qrcode.html.twig', [
+    'text'     => $text,
+    'svg'      => $svg,
+    'png'      => $png,
+    'error'    => $error,
+    'filename' => preg_replace('/[^A-Za-z0-9._-]+/', '_', $item->getName() ?: ($item::getType() . '_' . $items_id)) . '.png',
+]);

@@ -1,0 +1,81 @@
+{#
+ # -------------------------------------------------------------------------
+ # Asset QR Codes plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of Asset QR Codes.
+ #
+ # Asset QR Codes is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # Asset QR Codes is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with Asset QR Codes. If not, see <https://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2026 by Markus Brigl.
+ # @license   GPLv3+ https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://github.com/mbrigl/glpi-assetqr
+ # -------------------------------------------------------------------------
+ #}
+
+<form method="post" action="{{ action }}">
+    <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}" />
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="card-title"><i class="ti ti-qrcode me-2"></i>{{ __('QR code templates', 'assetqr') }}</h3>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">
+                {{ __('Placeholders in curly braces are replaced by the asset values, e.g. {name}, {serial}. Foreign keys such as {manufacturers_id} or {users_id} are resolved to their names. Additionally available: {id}, {itemtype}, {url}, {entity}. Empty lines are removed.', 'assetqr') }}
+            </p>
+
+            <label class="form-label fw-bold" for="template_default">{{ __('Default template', 'assetqr') }}</label>
+            <textarea class="form-control font-monospace mb-1" rows="7" id="template_default" name="template_default">{{ template_default }}</textarea>
+            <div class="form-hint mb-4">{{ __('Used for all asset types without their own template.', 'assetqr') }}</div>
+
+            {% set empty_hint = __('Empty = use default template', 'assetqr') %}
+            <div class="accordion" id="assetqr-templates">
+                {% for type in types %}
+                    {% set has_template = type.template|trim is not empty %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#assetqr-type-{{ loop.index0 }}">
+                                {{ type.label }}
+                                {% if has_template %}
+                                    <span class="badge bg-green-lt ms-2">{{ __('Own template', 'assetqr') }}</span>
+                                {% endif %}
+                            </button>
+                        </h2>
+                        <div id="assetqr-type-{{ loop.index0 }}" class="accordion-collapse collapse" data-bs-parent="#assetqr-templates">
+                            <div class="accordion-body">
+                                <textarea class="form-control font-monospace mb-2" rows="5" name="templates[{{ loop.index0 }}]"
+                                    placeholder="{{ empty_hint }}">{{ type.template }}</textarea>
+                                <div class="small text-muted">
+                                    {{ __('Available placeholders:', 'assetqr') }}
+                                    {% for placeholder in type.placeholders %}
+                                        <code>{{ '{' ~ placeholder ~ '}' }}</code>{{ not loop.last ? ' ' }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-footer d-flex flex-row-reverse">
+            <button type="submit" name="update" value="1" class="btn btn-primary">
+                <i class="ti ti-device-floppy"></i>
+                <span>{{ _x('button', 'Save') }}</span>
+            </button>
+        </div>
+    </div>
+</form>

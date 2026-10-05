@@ -3,6 +3,24 @@
 GLPI 11 plugin that adds a QR code button to every asset. The encoded text is built from a
 configurable template of asset fields.
 
+## Feature: QR codes for assets
+
+Every asset form (computers, monitors, printers, … including custom asset types) gets a **QR code** button below the form.
+It opens a dialog with the QR code, the encoded text, and "Download PNG" / "Print" actions.
+
+The encoded text is a template configured under *Setup → Plugins → Asset QR Codes* (gear icon), globally and optionally per asset type:
+
+```
+{itemtype}: {name}
+Serial number: {serial}
+Manufacturer: {manufacturers_id}
+{url}
+```
+
+- `{column}`: any column of the asset; foreign keys (`*_id`) are resolved to their names
+- `{id}`, `{itemtype}`, `{url}`, `{entity}`: extra values
+- Lines that are empty after substitution are dropped
+
 ## Development environment
 1. Open the folder in VS Code → "Reopen in Container".
 2. After the first start: http://localhost:8080 (login `glpi` / `glpi`).

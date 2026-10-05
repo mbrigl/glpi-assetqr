@@ -1,5 +1,3 @@
-<?php
-
 /**
  * -------------------------------------------------------------------------
  * Asset QR Codes plugin for GLPI
@@ -28,26 +26,35 @@
  * -------------------------------------------------------------------------
  */
 
-use GlpiPlugin\Assetqr\QrCode;
+/* global CFG_GLPI, glpi_ajax_dialog */
 
-/**
- * Installation: create tables, initialize rights/configuration.
- */
-function plugin_assetqr_install(): bool
-{
-    $config = Config::getConfigurationValues(QrCode::CONFIG_CONTEXT, ['template_default']);
-    if (!isset($config['template_default'])) {
-        Config::setConfigurationValues(QrCode::CONFIG_CONTEXT, ['template_default' => QrCode::getDefaultTemplate()]);
+$(document).on('click', '.assetqr-qrcode-btn', function () {
+    const btn = $(this);
+    glpi_ajax_dialog({
+        url: `${CFG_GLPI.root_doc}/plugins/assetqr/ajax/qrcode.php`,
+        method: 'get',
+        params: {
+            itemtype: btn.data('itemtype'),
+            items_id: btn.data('items-id'),
+        },
+        title: btn.data('title'),
+    });
+});
+
+$(document).on('click', '.assetqr-qrcode-print', function () {
+    const container = $(this).closest('.assetqr-qrcode');
+    const win = window.open('', '_blank', 'width=500,height=600');
+    if (!win) {
+        return;
     }
-    return true;
-}
-
-/**
- * Uninstallation: remove everything again.
- */
-function plugin_assetqr_uninstall(): bool
-{
-    $config = new Config();
-    $config->deleteByCriteria(['context' => QrCode::CONFIG_CONTEXT]);
-    return true;
-}
+    win.document.write(`<!doctype html><html><head><title></title>
+        <style>body{font-family:sans-serif;text-align:center;margin:2em}
+        svg{width:60mm;height:auto}pre{text-align:left;display:inline-block;white-space:pre-wrap}</style>
+        </head><body>${container.find('.assetqr-qrcode-image').html()}
+        <br><pre></pre></body></html>`);
+    win.document.title = $(this).data('title');
+    win.document.querySelector('pre').textContent = container.find('pre').text();
+    win.document.close();
+    win.focus();
+    win.print();
+});

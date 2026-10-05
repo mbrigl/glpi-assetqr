@@ -28,6 +28,9 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Plugin\Hooks;
+use GlpiPlugin\Assetqr\QrCode;
+
 define('PLUGIN_ASSETQR_VERSION', '0.1.0');
 define('PLUGIN_ASSETQR_MIN_GLPI', '11.0.0');
 define('PLUGIN_ASSETQR_MAX_GLPI', '11.0.99');
@@ -38,6 +41,14 @@ define('PLUGIN_ASSETQR_MAX_GLPI', '11.0.99');
 function plugin_init_assetqr(): void
 {
     global $PLUGIN_HOOKS;
+
+    // QR code button below the form of every asset
+    $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['assetqr'] = [QrCode::class, 'postItemForm'];
+    $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['assetqr'] = ['js/qrcode.js'];
+
+    if (Session::haveRight('config', UPDATE)) {
+        $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['assetqr'] = 'front/config.form.php';
+    }
 }
 
 function plugin_version_assetqr(): array
