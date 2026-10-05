@@ -1,0 +1,12 @@
+# Normalize all text files to LF, in the repository and in the working copy
+# (overrides core.autocrlf; PHP coding standards require LF)
+* text=auto eol=lf
+
+# Compiled gettext catalogs and images
+*.mo binary
+*.png binary
+
+# Development-only files, excluded from release archives (git archive)
+/.devcontainer export-ignore
+/.vscode export-ignore
+/.gitattributes export-ignore

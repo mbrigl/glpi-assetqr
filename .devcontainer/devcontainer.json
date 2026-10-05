@@ -1,0 +1,34 @@
+{
+  "name": "GLPI Plugin Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "glpi",
+  "runServices": ["glpi", "db"],
+  // Folder name = plugin name (lowercase letters/digits only), must match docker-compose.yml
+  "workspaceFolder": "/var/www/glpi/plugins/assetqr",
+  "remoteUser": "dev",
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "lts" }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "portsAttributes": {
+    "8080": { "label": "GLPI", "onAutoForward": "notify" },
+    "9003": { "label": "Xdebug", "onAutoForward": "silent" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "mblode.twig-language-2",
+        "editorconfig.editorconfig"
+      ],
+      "settings": {
+        // Include GLPI core for autocompletion/go-to-definition
+        "intelephense.environment.includePaths": ["/var/www/glpi"],
+        "intelephense.environment.phpVersion": "8.3.0",
+        "php.validate.executablePath": "/usr/local/bin/php"
+      }
+    }
+  }
+}
