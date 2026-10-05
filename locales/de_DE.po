@@ -1,0 +1,67 @@
+# German translations for assetqr package.
+# Copyright (C) 2026 THE assetqr'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the assetqr package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: assetqr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-05 18:42+0000\n"
+"PO-Revision-Date: 2026-10-05 18:16+0000\n"
+"Last-Translator: Markus Brigl\n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: front/config.form.php:65 src/QrCode.php:179
+msgid "QR code"
+msgstr "QR-Code"
+
+#: src/QrCode.php:59
+msgid "Serial number"
+msgstr "Seriennummer"
+
+#: src/QrCode.php:60
+msgid "Inventory number"
+msgstr "Inventarnummer"
+
+#: templates/config.html.twig:34
+msgid "QR code templates"
+msgstr "QR-Code-Vorlagen"
+
+#: templates/config.html.twig:38
+#, python-brace-format
+msgid "Placeholders in curly braces are replaced by the asset values, e.g. {name}, {serial}. Foreign keys such as {manufacturers_id} or {users_id} are resolved to their names. Additionally available: {id}, {itemtype}, {url}, {entity}. Empty lines are removed."
+msgstr "Platzhalter in geschweiften Klammern werden durch die Werte des Assets ersetzt, z. B. {name}, {serial}. Fremdschlüssel wie {manufacturers_id} oder {users_id} werden zu ihren Namen aufgelöst. Zusätzlich verfügbar: {id}, {itemtype}, {url}, {entity}. Leere Zeilen werden entfernt."
+
+#: templates/config.html.twig:41
+msgid "Default template"
+msgstr "Standardvorlage"
+
+#: templates/config.html.twig:43
+msgid "Used for all asset types without their own template."
+msgstr "Wird für alle Asset-Typen ohne eigene Vorlage verwendet."
+
+#: templates/config.html.twig:45
+msgid "Empty = use default template"
+msgstr "Leer = Standardvorlage verwenden"
+
+#: templates/config.html.twig:54
+msgid "Own template"
+msgstr "Eigene Vorlage"
+
+#: templates/config.html.twig:63
+msgid "Available placeholders:"
+msgstr "Verfügbare Platzhalter:"
+
+#: templates/qrcode.html.twig:32
+msgid "QR code could not be generated:"
+msgstr "QR-Code konnte nicht erzeugt werden:"
+
+#: templates/qrcode.html.twig:44
+msgid "Download PNG"
+msgstr "PNG herunterladen"

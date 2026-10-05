@@ -21,6 +21,19 @@ Manufacturer: {manufacturers_id}
 - `{id}`, `{itemtype}`, `{url}`, `{entity}`: extra values
 - Lines that are empty after substitution are dropped
 
+## Translations
+Languages: German (`de_DE`), English (`en_GB`), Spanish (`es_ES`), French (`fr_FR`), Italian (`it_IT`).
+Source strings are English and always use the plugin domain: `__('Text', 'assetqr')`.
+
+```bash
+tools/locales.sh           # extract strings to locales/assetqr.pot, update all .po files, compile .mo
+tools/locales.sh compile   # only compile .po -> .mo
+```
+
+New or changed strings end up empty (or `fuzzy`) in the `.po` files: translate them, then run the script again.
+To add a language, add its code to `LANGS` in `tools/locales.sh`. GLPI picks `locales/<user language>.mo`,
+falls back to the system language and then to `en_GB`; regional variants (e.g. `de_AT`, `fr_CA`) need their own file.
+
 ## Development environment
 1. Open the folder in VS Code → "Reopen in Container".
 2. After the first start: http://localhost:8080 (login `glpi` / `glpi`).

@@ -9,7 +9,7 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends git unzip sudo curl ca-certificates mariadb-client \
+ && apt-get install -y --no-install-recommends git unzip sudo curl ca-certificates mariadb-client gettext \
  && rm -rf /var/lib/apt/lists/*
 
 # Extensions required or recommended by GLPI + Xdebug

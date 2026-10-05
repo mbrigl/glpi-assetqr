@@ -1,0 +1,67 @@
+# French translations for assetqr package.
+# Copyright (C) 2026 THE assetqr'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the assetqr package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: assetqr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-05 18:42+0000\n"
+"PO-Revision-Date: 2026-10-05 18:16+0000\n"
+"Last-Translator: Markus Brigl\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: front/config.form.php:65 src/QrCode.php:179
+msgid "QR code"
+msgstr "Code QR"
+
+#: src/QrCode.php:59
+msgid "Serial number"
+msgstr "Numéro de série"
+
+#: src/QrCode.php:60
+msgid "Inventory number"
+msgstr "Numéro d'inventaire"
+
+#: templates/config.html.twig:34
+msgid "QR code templates"
+msgstr "Modèles de code QR"
+
+#: templates/config.html.twig:38
+#, python-brace-format
+msgid "Placeholders in curly braces are replaced by the asset values, e.g. {name}, {serial}. Foreign keys such as {manufacturers_id} or {users_id} are resolved to their names. Additionally available: {id}, {itemtype}, {url}, {entity}. Empty lines are removed."
+msgstr "Les espaces réservés entre accolades sont remplacés par les valeurs de l'actif, p. ex. {name}, {serial}. Les clés étrangères comme {manufacturers_id} ou {users_id} sont remplacées par leur nom. Également disponibles : {id}, {itemtype}, {url}, {entity}. Les lignes vides sont supprimées."
+
+#: templates/config.html.twig:41
+msgid "Default template"
+msgstr "Modèle par défaut"
+
+#: templates/config.html.twig:43
+msgid "Used for all asset types without their own template."
+msgstr "Utilisé pour tous les types d'actifs sans modèle propre."
+
+#: templates/config.html.twig:45
+msgid "Empty = use default template"
+msgstr "Vide = utiliser le modèle par défaut"
+
+#: templates/config.html.twig:54
+msgid "Own template"
+msgstr "Modèle propre"
+
+#: templates/config.html.twig:63
+msgid "Available placeholders:"
+msgstr "Espaces réservés disponibles :"
+
+#: templates/qrcode.html.twig:32
+msgid "QR code could not be generated:"
+msgstr "Impossible de générer le code QR :"
+
+#: templates/qrcode.html.twig:44
+msgid "Download PNG"
+msgstr "Télécharger en PNG"
