@@ -1,15 +1,24 @@
+# Local overrides go into .devcontainer/.env (git-ignored):
+#   GLPI_PORT=8081      host port for GLPI (default 8080)
+#   GLPI_SEED_DATA=0    don't seed sample computers on container creation
+
 services:
   glpi:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        GLPI_VERSION: "11.0.11"
+    build: .
+    # Explicit localhost/ prefix: Podman otherwise tags compose builds as
+    # docker.io/library/..., which the devcontainer CLI can't find
+    image: localhost/glpi-assetqr_devcontainer-glpi:latest
+    # Rootless Podman: keep the host UID, so "dev" owns the workspace files
+    userns_mode: keep-id
     ports:
-      - "8080:80"
+      - "${GLPI_PORT:-8080}:80"
+    environment:
+      GLPI_PORT: ${GLPI_PORT:-8080}
+      GLPI_SEED_DATA: ${GLPI_SEED_DATA:-1}
     volumes:
-      # Mount the plugin source directly into GLPI's plugins directory
-      - ..:/var/www/glpi/plugins/assetqr:cached
+      # Plugin source, mounted directly into GLPI's plugins directory
+      # (z: SELinux relabel for Fedora/RHEL, otherwise "Permission denied")
+      - ..:/var/www/glpi/plugins/assetqr:cached,z
       # GLPI config, files and logs survive rebuilds
       - glpi-data:/var/lib/glpi
       - glpi-logs:/var/log/glpi

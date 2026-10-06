@@ -1,50 +1,47 @@
 <?php
 
 /**
- * Legt Beispieldaten (Computer inkl. Hersteller, Typen, Modelle, Status, Standorte) an.
+ * Creates sample computers incl. manufacturers, types, models, states and locations.
  *
- * Aufruf: sudo -u www-data php /var/www/glpi/plugins/assetqr/.devcontainer/seed.php [anzahl]
+ * Usage: sudo -u www-data php .devcontainer/seed.php [count] [--purge]
  *
- * Idempotent: bereits vorhandene Computer (gleicher Name) werden übersprungen.
- * Mit --purge werden vorher alle Computer endgültig gelöscht.
+ * Idempotent: computers that already exist (same name) are skipped.
+ * --purge permanently deletes all computers first.
  */
 
-$glpi_dir = '/var/www/glpi';
-$args     = array_slice($argv, 1);
-$purge    = in_array('--purge', $args, true);
-$numeric  = array_values(array_filter($args, 'is_numeric'));
-$count    = max(1, (int) ($numeric[0] ?? 50));
+$args    = array_slice($argv, 1);
+$purge   = in_array('--purge', $args, true);
+$numeric = array_values(array_filter($args, 'is_numeric'));
+$count   = max(1, (int) ($numeric[0] ?? 50));
 
-require_once $glpi_dir . '/vendor/autoload.php';
+require_once '/var/www/glpi/vendor/autoload.php';
 
-$kernel = new \Glpi\Kernel\Kernel();
-$kernel->boot();
+(new \Glpi\Kernel\Kernel())->boot();
 
-// Als Super-Admin "glpi" arbeiten, damit Historie/Autor korrekt gesetzt werden
-$_SESSION['glpiID']   = 2;
-$_SESSION['glpiname'] = 'glpi';
+// Act as super-admin "glpi", so history and author are set correctly
+$_SESSION['glpiID']            = 2;
+$_SESSION['glpiname']          = 'glpi';
 $_SESSION['glpiactive_entity'] = 0;
 
-$entities_id = 0;
+$computer = new Computer();
 
 if ($purge) {
-    $computer = new Computer();
-    $purged   = 0;
+    $purged = 0;
     foreach ($computer->find() as $row) {
         $computer->delete(['id' => $row['id']], true);
         $purged++;
     }
-    echo "$purged Computer gelöscht.\n";
+    echo "$purged computers deleted.\n";
 }
 
-/** Dropdown-Eintrag holen oder anlegen und ID zurückgeben. */
+/** Returns the ID of a dropdown item, creating it if necessary. */
 function seed_dropdown(string $itemtype, string $name, array $extra = []): int
 {
-    $item  = new $itemtype();
-    $input = ['name' => $name] + $extra;
+    $item = new $itemtype();
     if ($item->getFromDBByCrit(['name' => $name])) {
         return (int) $item->getID();
     }
+    $input = ['name' => $name] + $extra;
     if ($item->isEntityAssign()) {
         $input += ['entities_id' => 0, 'is_recursive' => 1];
     }
@@ -63,9 +60,9 @@ foreach ($catalog as $manufacturer => $model_names) {
     $manufacturers_id = seed_dropdown(Manufacturer::class, $manufacturer);
     foreach ($model_names as $model) {
         $models[] = [
-            'manufacturers_id'   => $manufacturers_id,
-            'computermodels_id'  => seed_dropdown(ComputerModel::class, $model),
-            'portable'           => (bool) preg_match('/Latitude|Book|ThinkPad/', $model),
+            'manufacturers_id'  => $manufacturers_id,
+            'computermodels_id' => seed_dropdown(ComputerModel::class, $model),
+            'portable'          => (bool) preg_match('/Latitude|Book|ThinkPad/', $model),
         ];
     }
 }
@@ -85,34 +82,33 @@ $locations = array_map(
     ['Wien', 'Graz', 'Linz', 'Homeoffice'],
 );
 
-// Alle Zufallswerte vorab erzeugen: GLPI nutzt mt_rand() intern (z. B. in add()),
-// was sonst die Sequenz verschiebt und die Daten zwischen Läufen ändert.
+// Generate all random values up front: GLPI uses mt_rand() internally (e.g. in add()),
+// which would otherwise shift the sequence and change the data between runs.
 mt_srand(42);
 $rows = [];
 for ($i = 1; $i <= $count; $i++) {
     $model  = $models[mt_rand(0, count($models) - 1)];
     $rows[] = [
         'name'              => sprintf('%s-%04d', $model['portable'] ? 'NB' : 'PC', $i),
-        'entities_id'       => $entities_id,
+        'entities_id'       => 0,
         'serial'            => sprintf('SN%08X', mt_rand()),
         'otherserial'       => sprintf('INV-%05d', $i),
         'manufacturers_id'  => $model['manufacturers_id'],
         'computermodels_id' => $model['computermodels_id'],
         'computertypes_id'  => $model['portable'] ? $types['laptop'] : $types['desktop'],
-        // Gewichtet: die meisten Geräte sind in Betrieb
+        // Weighted: most devices are in use
         'states_id'         => $states[[0, 0, 0, 0, 0, 1, 1, 2, 3][mt_rand(0, 8)]],
         'locations_id'      => $locations[mt_rand(0, count($locations) - 1)],
     ];
 }
 
-$computer = new Computer();
-$created  = 0;
+$created = 0;
 foreach ($rows as $row) {
-    if ($computer->getFromDBByCrit(['name' => $row['name'], 'entities_id' => $entities_id])) {
+    if ($computer->getFromDBByCrit(['name' => $row['name'], 'entities_id' => 0])) {
         continue;
     }
     $computer->add($row);
     $created++;
 }
 
-echo "Beispieldaten: $created Computer angelegt (" . ($count - $created) . " bereits vorhanden).\n";
+echo "Sample data: $created computers created (" . ($count - $created) . " already existed).\n";

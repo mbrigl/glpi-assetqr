@@ -39,6 +39,7 @@ falls back to the system language and then to `en_GB`; regional variants (e.g. `
 ## Development environment
 1. Open the folder in VS Code → "Reopen in Container".
 2. After the first start: http://localhost:8080 (login `glpi` / `glpi`).
+   If port 8080 is taken, put e.g. `GLPI_PORT=8081` into `.devcontainer/.env` and rebuild the container.
 3. The plugin lives at `/var/www/glpi/plugins/assetqr` and is installed and activated automatically.
 
 ## Sample data
@@ -47,7 +48,7 @@ sudo -u www-data php .devcontainer/seed.php          # 50 computers (idempotent)
 sudo -u www-data php .devcontainer/seed.php 200      # different number
 sudo -u www-data php .devcontainer/seed.php --purge  # delete all computers first
 ```
-To seed automatically when the container is created, set `GLPI_SEED_DATA=1` in `docker-compose.yml`.
+Sample data is seeded automatically when the container is created; put `GLPI_SEED_DATA=0` into `.devcontainer/.env` to disable it.
 
 ## Useful commands
 ```bash
@@ -83,7 +84,7 @@ The plugins catalog reads `assetqr.xml` from
 
 ## Renaming the plugin
 The plugin name (lowercase letters/digits only) must be identical everywhere:
-- `docker-compose.yml`: mount target `/var/www/glpi/plugins/<name>`
+- `docker-compose.yml`: mount target `/var/www/glpi/plugins/<name>` and image name
 - `devcontainer.json`: `workspaceFolder`
 - `setup.php` / `hook.php`: function names `plugin_<name>_...` and constants
 
