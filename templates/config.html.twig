@@ -1,0 +1,38 @@
+{#
+ # -------------------------------------------------------------------------
+ # Theme Switch plugin for GLPI
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2026 by Markus Brigl.
+ # @license   GPLv3+ https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://github.com/mbrigl/glpi-themeswitch
+ # -------------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+<div class="card">
+   <form method="post" action="{{ path('/plugins/themeswitch/front/config.form.php') }}">
+      <div class="card-header">
+         <h3 class="card-title">
+            <i class="ti ti-sun-moon me-2"></i>
+            {{ __('Theme Switch', 'themeswitch') }}
+         </h3>
+      </div>
+      <div class="card-body">
+         <p class="text-muted">
+            {{ __('Palettes used when a user selects the light or dark theme. "System" follows the operating system setting.', 'themeswitch') }}
+         </p>
+         <div class="row">
+            {{ fields.dropdownArrayField('light_palette', config.light_palette, palettes, __('Light palette', 'themeswitch')) }}
+            {{ fields.dropdownArrayField('dark_palette', config.dark_palette, palettes, __('Dark palette', 'themeswitch')) }}
+         </div>
+      </div>
+      <div class="card-footer">
+         <button type="submit" name="update" value="1" class="btn btn-primary">
+            <i class="ti ti-device-floppy"></i>
+            <span>{{ _x('button', 'Save') }}</span>
+         </button>
+      </div>
+      <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}" />
+   </form>
+</div>

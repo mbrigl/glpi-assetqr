@@ -1,0 +1,15 @@
+/* Theme Switch plugin for GLPI - GPLv3+ - (C) 2026 Markus Brigl */
+
+.plugin-themeswitch {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plugin-themeswitch .btn-group {
+    margin-left: auto;
+}
+
+.plugin-themeswitch .btn {
+    padding: 0.15rem 0.45rem;
+}

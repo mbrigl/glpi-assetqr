@@ -28,6 +28,9 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Plugin\Hooks;
+use GlpiPlugin\Themeswitch\ThemeSwitch;
+
 define('PLUGIN_THEMESWITCH_VERSION', '0.1.0');
 define('PLUGIN_THEMESWITCH_MIN_GLPI', '11.0.0');
 define('PLUGIN_THEMESWITCH_MAX_GLPI', '11.0.99');
@@ -38,6 +41,34 @@ define('PLUGIN_THEMESWITCH_MAX_GLPI', '11.0.99');
 function plugin_init_themeswitch(): void
 {
     global $PLUGIN_HOOKS;
+
+    $PLUGIN_HOOKS[Hooks::CSRF_COMPLIANT]['themeswitch'] = true;
+
+    if (!Plugin::isPluginActive('themeswitch')) {
+        return;
+    }
+
+    if (Session::haveRight('config', UPDATE)) {
+        $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['themeswitch'] = 'front/config.form.php';
+    }
+
+    if (Session::getLoginUserID() === false) {
+        return;
+    }
+
+    ThemeSwitch::applyToSession();
+
+    $PLUGIN_HOOKS[Hooks::ADD_CSS]['themeswitch']        = 'css/themeswitch.css';
+    $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['themeswitch'] = 'js/themeswitch.js';
+    $PLUGIN_HOOKS[Hooks::ADD_HEADER_TAG]['themeswitch'] = [
+        [
+            'tag'        => 'meta',
+            'properties' => [
+                'name'    => 'glpi-plugin-themeswitch',
+                'content' => json_encode(ThemeSwitch::getClientConfig(), JSON_THROW_ON_ERROR),
+            ],
+        ],
+    ];
 }
 
 function plugin_version_themeswitch(): array

@@ -2,6 +2,12 @@
 
 GLPI 11 plugin for switching the GLPI theme.
 
+## Usage
+- **Users:** user menu (avatar, top right) → *Theme* → light / dark / system.
+  The choice is stored per user on the server. "System" follows the OS setting (`prefers-color-scheme`).
+- **Admins:** *Setup → Plugins → Theme Switch* (wrench icon) selects the palette used for light and for dark.
+- As long as a user has never used the switch, their normal GLPI palette (*My settings*) applies.
+
 ## Development environment
 1. Open the folder in VS Code → "Reopen in Container".
 2. After the first start: http://localhost:8080 (login `glpi` / `glpi`).

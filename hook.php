@@ -28,11 +28,46 @@
  * -------------------------------------------------------------------------
  */
 
+use GlpiPlugin\Themeswitch\ThemeSwitch;
+
 /**
  * Installation: create tables, initialize rights/configuration.
  */
 function plugin_themeswitch_install(): bool
 {
+    global $DB;
+
+    $migration = new Migration(PLUGIN_THEMESWITCH_VERSION);
+
+    $table = ThemeSwitch::TABLE;
+    if (!$DB->tableExists($table)) {
+        $charset   = DBConnection::getDefaultCharset();
+        $collation = DBConnection::getDefaultCollation();
+        $sign      = DBConnection::getDefaultPrimaryKeySignOption();
+
+        $DB->doQuery(
+            "CREATE TABLE `$table` (
+                `id` int {$sign} NOT NULL AUTO_INCREMENT,
+                `users_id` int {$sign} NOT NULL DEFAULT '0',
+                `mode` varchar(10) NOT NULL DEFAULT 'system',
+                `date_mod` timestamp NULL DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `users_id` (`users_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET={$charset} COLLATE={$collation} ROW_FORMAT=DYNAMIC"
+        );
+    }
+
+    // addConfig() keeps existing values on reinstall/update.
+    $migration->addConfig(
+        [
+            'light_palette' => ThemeSwitch::DEFAULT_LIGHT_PALETTE,
+            'dark_palette'  => ThemeSwitch::DEFAULT_DARK_PALETTE,
+        ],
+        ThemeSwitch::CONFIG_CONTEXT
+    );
+
+    $migration->executeMigration();
+
     return true;
 }
 
@@ -41,5 +76,10 @@ function plugin_themeswitch_install(): bool
  */
 function plugin_themeswitch_uninstall(): bool
 {
+    global $DB;
+
+    $DB->dropTable(ThemeSwitch::TABLE, true);
+    Config::deleteConfigurationValues(ThemeSwitch::CONFIG_CONTEXT, ['light_palette', 'dark_palette']);
+
     return true;
 }
