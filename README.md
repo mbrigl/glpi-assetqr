@@ -1,6 +1,6 @@
-# Asset QR Codes for GLPI
+# Theme Switch for GLPI
 
-GLPI 11 plugin that adds a QR code button to every asset.
+GLPI 11 plugin for switching the GLPI theme.
 
 ## Development environment
 1. Open the folder in VS Code → "Reopen in Container".
@@ -32,6 +32,7 @@ or append `?XDEBUG_TRIGGER=1` to the URL, then start "Xdebug: Listen" in VS Code
 The plugin name (lowercase letters/digits only) must be identical everywhere:
 - `docker-compose.yml`: mount target `/var/www/glpi/plugins/<name>` and image name
 - `devcontainer.json`: `workspaceFolder`
+- `setup.php` / `hook.php`: function names `plugin_<name>_...` and constants
 
 ## Starting from scratch
 Delete the volumes (`glpi-data`, `db-data`) and rebuild the container.
