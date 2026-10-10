@@ -53,8 +53,15 @@ final class ThemeSwitch
     /** Cookie in which the browser reports its `prefers-color-scheme` (used for the "system" mode). */
     public const SCHEME_COOKIE = 'glpi_themeswitch_scheme';
 
-    public const DEFAULT_LIGHT_PALETTE = 'auror';
-    public const DEFAULT_DARK_PALETTE  = 'darker';
+    /** Palettes shipped with the plugin (palettes/*.scss), copied into GLPI's custom themes directory. */
+    public const PLUGIN_PALETTES = ['carbon_light', 'carbon_dark'];
+
+    public const DEFAULT_LIGHT_PALETTE = 'carbon_light';
+    public const DEFAULT_DARK_PALETTE  = 'carbon_dark';
+
+    /** Core palettes used when neither the configured nor the default palette exists. */
+    private const FALLBACK_LIGHT_PALETTE = 'auror';
+    private const FALLBACK_DARK_PALETTE  = 'darker';
 
     private const SESSION_KEY = 'plugin_themeswitch';
 
@@ -64,15 +71,58 @@ final class ThemeSwitch
     public static function getConfig(): array
     {
         $values = Config::getConfigurationValues(self::CONFIG_CONTEXT, ['light_palette', 'dark_palette']);
-        $themes = ThemeManager::getInstance();
-
-        $light = $values['light_palette'] ?? '';
-        $dark  = $values['dark_palette'] ?? '';
 
         return [
-            'light_palette' => $themes->getTheme($light) !== null ? $light : self::DEFAULT_LIGHT_PALETTE,
-            'dark_palette'  => $themes->getTheme($dark) !== null ? $dark : self::DEFAULT_DARK_PALETTE,
+            'light_palette' => self::firstExistingPalette(
+                $values['light_palette'] ?? '',
+                self::DEFAULT_LIGHT_PALETTE,
+                self::FALLBACK_LIGHT_PALETTE
+            ),
+            'dark_palette'  => self::firstExistingPalette(
+                $values['dark_palette'] ?? '',
+                self::DEFAULT_DARK_PALETTE,
+                self::FALLBACK_DARK_PALETTE
+            ),
         ];
+    }
+
+    private static function firstExistingPalette(string ...$keys): string
+    {
+        $themes = ThemeManager::getInstance();
+        foreach ($keys as $key) {
+            if ($key !== '' && $themes->getTheme($key) !== null) {
+                return $key;
+            }
+        }
+        return end($keys);
+    }
+
+    /**
+     * Copy the plugin palettes into GLPI's custom themes directory.
+     */
+    public static function installPalettes(): bool
+    {
+        $target_dir = ThemeManager::getInstance()->getCustomThemesDirectory();
+        $success    = true;
+        foreach (self::PLUGIN_PALETTES as $key) {
+            $source = dirname(__DIR__) . '/palettes/' . $key . '.scss';
+            if (!@copy($source, $target_dir . '/' . $key . '.scss')) {
+                trigger_error(sprintf('Unable to copy palette "%s" into "%s".', $key, $target_dir), E_USER_WARNING);
+                $success = false;
+            }
+        }
+        return $success;
+    }
+
+    public static function uninstallPalettes(): void
+    {
+        $target_dir = ThemeManager::getInstance()->getCustomThemesDirectory();
+        foreach (self::PLUGIN_PALETTES as $key) {
+            $file = $target_dir . '/' . $key . '.scss';
+            if (is_file($file)) {
+                @unlink($file);
+            }
+        }
     }
 
     /**

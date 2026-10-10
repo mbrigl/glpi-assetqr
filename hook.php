@@ -39,6 +39,10 @@ function plugin_themeswitch_install(): bool
 
     $migration = new Migration(PLUGIN_THEMESWITCH_VERSION);
 
+    if (!ThemeSwitch::installPalettes()) {
+        return false;
+    }
+
     $table = ThemeSwitch::TABLE;
     if (!$DB->tableExists($table)) {
         $charset   = DBConnection::getDefaultCharset();
@@ -79,6 +83,7 @@ function plugin_themeswitch_uninstall(): bool
     global $DB;
 
     $DB->dropTable(ThemeSwitch::TABLE, true);
+    ThemeSwitch::uninstallPalettes();
     Config::deleteConfigurationValues(ThemeSwitch::CONFIG_CONTEXT, ['light_palette', 'dark_palette']);
 
     return true;

@@ -1,0 +1,103 @@
+/* theme-name: Carbon Dark */
+
+/*!
+ * Theme Switch plugin for GLPI - GPLv3+ - (C) 2026 Markus Brigl
+ *
+ * Palette inspired by the Carbon Design System "Gray 100" theme
+ * (https://carbondesignsystem.com, Apache-2.0). Not affiliated with IBM.
+ *
+ * Installed into GLPI's custom themes directory by the Theme Switch plugin.
+ * Carbon specific shapes and the IBM Plex Sans font are added by the plugin
+ * stylesheet (public/css/themeswitch.css).
+ */
+
+$is-dark: true;
+
+:root[data-glpi-theme="carbon_dark"] {
+    // Carbon tokens, also used by the plugin stylesheet
+    --cds-background: #161616;
+    --cds-layer-01: #262626;
+    --cds-layer-hover-01: #333333;
+    --cds-layer-selected-01: #393939;
+    --cds-field: #393939;
+    --cds-border-subtle-01: #393939;
+    --cds-border-strong-01: #6f6f6f;
+    --cds-text-primary: #f4f4f4;
+    --cds-text-secondary: #c6c6c6;
+    --cds-text-helper: #a8a8a8;
+    --cds-link-primary: #78a9ff;
+    --cds-link-primary-hover: #a6c8ff;
+    --cds-button-primary: #0f62fe;
+    --cds-button-primary-hover: #0050e6;
+    --cds-button-primary-active: #002d9c;
+    --cds-button-secondary: #6f6f6f;
+    --cds-button-secondary-hover: #5e5e5e;
+    --cds-focus: #ffffff;
+    --cds-focus-inset: #161616;
+
+    --tblr-light: #f4f4f4;
+    --tblr-dark: #161616;
+    --tblr-body-bg: #161616;
+    --tblr-body-color: #f4f4f4;
+    --tblr-body-color-rgb: 244, 244, 244;
+    --tblr-bg-surface: #262626;
+    --tblr-bg-surface-secondary: #262626;
+    --tblr-bg-surface-tertiary: #262626;
+    --tblr-border-color: #393939;
+    --tblr-primary-rgb: 15, 98, 254; // #0f62fe
+    --tblr-primary: #0f62fe;
+    --tblr-primary-fg: #ffffff;
+    --tblr-primary-darken: #0050e6;
+    --tblr-secondary: #c6c6c6;
+    --tblr-secondary-rgb: 198, 198, 198;
+    --tblr-secondary-fg: #161616;
+    --tblr-tertiary: #a8a8a8;
+    --tblr-muted: #c6c6c6;
+    --tblr-muted-rgb: 198, 198, 198;
+    --tblr-info: #4589ff;
+    --tblr-success: #42be65;
+    --tblr-warning: #f1c21b;
+    --tblr-danger: #fa4d56;
+    --tblr-link-color-rgb: 120, 169, 255; // #78a9ff
+    --tblr-link-hover-color-rgb: 166, 200, 255;
+    --tblr-code-color: #c6c6c6;
+    --tblr-badge-bg: #393939;
+    --tblr-badge-color: #f4f4f4;
+    --tblr-navbar-color: #161616;
+
+    // UI shell
+    --glpi-mainmenu-bg: #161616;
+    --glpi-mainmenu-fg: #f4f4f4;
+    --glpi-mainmenu-fg-muted: #c6c6c6;
+    --glpi-mainmenu-active-bg: #393939;
+    --glpi-tabs-bg: #161616;
+    --glpi-tabs-fg: #c6c6c6;
+    --glpi-tabs-border-color: transparent;
+    --glpi-tabs-active-bg: #262626;
+    --glpi-tabs-active-fg: #f4f4f4;
+    --glpi-tabs-active-border-color: transparent;
+    --glpi-form-header-fg: #78a9ff;
+    --glpi-form-header-border-color: #393939;
+    --glpi-badge-bg: #001d6c;
+    --glpi-badge-fg: #a6c8ff;
+    --glpi-search-bg: #262626;
+    --glpi-itil-secondary-bg: #262626;
+    --glpi-timeline-fup-bg: #262626;
+    --glpi-timeline-fup-fg: #c6c6c6;
+    --glpi-timeline-fup-border: #393939;
+
+    // Helpdesk
+    --glpi-helpdesk-header: #262626;
+    --glpi-helpdesk-tiles-section-bg: #161616;
+    --glpi-helpdesk-tabs-section-bg: #161616;
+    --glpi-illustrations-header-light: #262626;
+    --glpi-illustrations-gradient-1: #a6c8ff;
+    --glpi-illustrations-gradient-2: #4589ff;
+    --glpi-illustrations-gradient-3: #0043ce;
+
+    // Preview in the palette selector
+    --glpi-palette-color-1: #161616;
+    --glpi-palette-color-2: #262626;
+    --glpi-palette-color-3: #0f62fe;
+    --glpi-palette-color-4: #6f6f6f;
+}

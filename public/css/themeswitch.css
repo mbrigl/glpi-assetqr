@@ -13,3 +13,127 @@
 .plugin-themeswitch .btn {
     padding: 0.15rem 0.45rem;
 }
+
+/*
+ * Carbon palettes (palettes/carbon_*.scss)
+ *
+ * The palettes only define colors; the Carbon look (IBM Plex Sans, square corners,
+ * flat surfaces, 2px focus outline, underlined fields) is added here.
+ * IBM Plex Sans: Copyright 2018 IBM Corp., SIL Open Font License 1.1 (fonts/ibm-plex-sans/OFL.txt).
+ */
+
+@font-face {
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url("../fonts/ibm-plex-sans/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url("../fonts/ibm-plex-sans/ibm-plex-sans-latin-ext-400-normal.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500 700;
+    src: url("../fonts/ibm-plex-sans/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500 700;
+    src: url("../fonts/ibm-plex-sans/ibm-plex-sans-latin-ext-600-normal.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root[data-glpi-theme^="carbon_"] {
+    --tblr-font-sans-serif: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+    --tblr-body-font-family: var(--tblr-font-sans-serif);
+    --tblr-border-radius-scale: 0;
+    --tblr-border-radius: 0;
+    --tblr-border-radius-sm: 0;
+    --tblr-border-radius-md: 0;
+    --tblr-border-radius-lg: 0;
+    --tblr-border-radius-xl: 0;
+    --tblr-border-radius-xxl: 0;
+    --tblr-box-shadow: none;
+    --tblr-box-shadow-card: none;
+    --tblr-box-shadow-dropdown: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-glpi-theme^="carbon_"] body {
+    font-family: var(--tblr-font-sans-serif);
+    letter-spacing: 0.16px;
+}
+
+/* Flat surfaces */
+:root[data-glpi-theme^="carbon_"] .card,
+:root[data-glpi-theme^="carbon_"] .btn,
+:root[data-glpi-theme^="carbon_"] .nav-tabs .nav-link {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Buttons */
+:root[data-glpi-theme^="carbon_"] .btn {
+    font-weight: 400;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-primary {
+    --tblr-btn-color: #ffffff;
+    --tblr-btn-bg: var(--cds-button-primary);
+    --tblr-btn-border-color: transparent;
+    --tblr-btn-hover-color: #ffffff;
+    --tblr-btn-hover-bg: var(--cds-button-primary-hover);
+    --tblr-btn-hover-border-color: transparent;
+    --tblr-btn-active-color: #ffffff;
+    --tblr-btn-active-bg: var(--cds-button-primary-active);
+    --tblr-btn-active-border-color: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-secondary {
+    --tblr-btn-color: #ffffff;
+    --tblr-btn-bg: var(--cds-button-secondary);
+    --tblr-btn-border-color: transparent;
+    --tblr-btn-hover-color: #ffffff;
+    --tblr-btn-hover-bg: var(--cds-button-secondary-hover);
+    --tblr-btn-hover-border-color: transparent;
+}
+
+/* Fields: filled background with a bottom border */
+:root[data-glpi-theme^="carbon_"] .form-control,
+:root[data-glpi-theme^="carbon_"] .form-select,
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection {
+    background-color: var(--cds-field);
+    border-color: transparent;
+    border-bottom-color: var(--cds-border-strong-01);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* 2px focus outline instead of the Tabler focus ring */
+:root[data-glpi-theme^="carbon_"] :focus-visible,
+:root[data-glpi-theme^="carbon_"] .form-control:focus,
+:root[data-glpi-theme^="carbon_"] .form-select:focus,
+:root[data-glpi-theme^="carbon_"] .form-check-input:focus,
+:root[data-glpi-theme^="carbon_"] .select2-container--focus .select2-selection {
+    outline: 2px solid var(--cds-focus);
+    outline-offset: -2px;
+    box-shadow: none;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-primary:focus-visible {
+    box-shadow: inset 0 0 0 1px var(--cds-focus), inset 0 0 0 2px var(--cds-focus-inset);
+}

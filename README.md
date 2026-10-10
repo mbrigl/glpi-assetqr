@@ -8,6 +8,16 @@ GLPI 11 plugin for switching the GLPI theme.
 - **Admins:** *Setup → Plugins → Theme Switch* (wrench icon) selects the palette used for light and for dark.
 - As long as a user has never used the switch, their normal GLPI palette (*My settings*) applies.
 
+## Carbon palettes
+The plugin ships two palettes inspired by the [Carbon Design System](https://carbondesignsystem.com)
+(Apache-2.0, not affiliated with IBM): **Carbon Light** ("White") and **Carbon Dark** ("Gray 100").
+They are the default light/dark palettes.
+- Source: `palettes/carbon_*.scss` (colors only). On install they are copied into GLPI's custom themes
+  directory (`GLPI_THEMES_DIR`) and removed again on uninstall. After editing them, reinstall the plugin.
+- The Carbon look (IBM Plex Sans, square corners, focus outline, fields) lives in `public/css/themeswitch.css`
+  and applies to every palette whose key starts with `carbon_`.
+- IBM Plex Sans is bundled under the SIL Open Font License (`public/fonts/ibm-plex-sans/OFL.txt`).
+
 ## Development environment
 1. Open the folder in VS Code → "Reopen in Container".
 2. After the first start: http://localhost:8080 (login `glpi` / `glpi`).
