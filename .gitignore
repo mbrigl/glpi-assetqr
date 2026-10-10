@@ -1,0 +1,2 @@
+# Local dev container overrides (e.g. GLPI_PORT, GLPI_SEED_DATA)
+/.devcontainer/.env

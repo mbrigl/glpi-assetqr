@@ -1,0 +1,42 @@
+# Local overrides go into .devcontainer/.env (git-ignored):
+#   GLPI_PORT=8081      host port for GLPI (default 8080)
+#   GLPI_SEED_DATA=0    don't seed sample computers on container creation
+
+services:
+  glpi:
+    build: .
+    # Explicit localhost/ prefix: Podman otherwise tags compose builds as
+    # docker.io/library/..., which the devcontainer CLI can't find
+    image: localhost/glpi-themeswitch_devcontainer-glpi:latest
+    # Rootless Podman: keep the host UID, so "dev" owns the workspace files
+    userns_mode: keep-id
+    ports:
+      - "${GLPI_PORT:-8080}:80"
+    environment:
+      GLPI_PORT: ${GLPI_PORT:-8080}
+      GLPI_SEED_DATA: ${GLPI_SEED_DATA:-1}
+    volumes:
+      # Plugin source, mounted directly into GLPI's plugins directory
+      # (z: SELinux relabel for Fedora/RHEL, otherwise "Permission denied")
+      - ..:/var/www/glpi/plugins/themeswitch:cached,z
+      # GLPI config, files and logs survive rebuilds
+      - glpi-data:/var/lib/glpi
+      - glpi-logs:/var/log/glpi
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: glpi
+      MARIADB_USER: glpi
+      MARIADB_PASSWORD: glpi
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  glpi-data:
+  glpi-logs:
+  db-data:
