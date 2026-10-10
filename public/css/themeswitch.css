@@ -17,8 +17,9 @@
 /*
  * Carbon palettes (palettes/carbon_*.scss)
  *
- * The palettes only define colors; the Carbon look (IBM Plex Sans, square corners,
- * flat surfaces, 2px focus outline, underlined fields) is added here.
+ * The palettes only define colors (and Carbon tokens as --cds-* variables); the Carbon
+ * components (type, fields, buttons, tables, tabs, ...) are approximated here.
+ * Sizes follow Carbon: fields/buttons 40px ("md"), small 32px, form footer buttons 48px.
  * IBM Plex Sans: Copyright 2018 IBM Corp., SIL Open Font License 1.1 (fonts/ibm-plex-sans/OFL.txt).
  */
 
@@ -58,9 +59,40 @@
     unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
+/* Icons as data URIs, colored per theme */
+:root[data-glpi-theme="carbon_light"] {
+    --cds-svg-chevron: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23161616' d='M8 11 3 6l.7-.7L8 9.6l4.3-4.3.7.7z'/%3e%3c/svg%3e");
+    --cds-svg-check: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-width='1.75' d='m3.5 8.25 3 3 6-6.25'/%3e%3c/svg%3e");
+    --cds-svg-dash: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath stroke='%23ffffff' stroke-width='1.75' d='M4 8h8'/%3e%3c/svg%3e");
+    --cds-svg-radio: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-9 -9 18 18'%3e%3ccircle r='4' fill='%23161616'/%3e%3c/svg%3e");
+}
+
+:root[data-glpi-theme="carbon_dark"] {
+    --cds-svg-chevron: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23f4f4f4' d='M8 11 3 6l.7-.7L8 9.6l4.3-4.3.7.7z'/%3e%3c/svg%3e");
+    --cds-svg-check: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23161616' stroke-width='1.75' d='m3.5 8.25 3 3 6-6.25'/%3e%3c/svg%3e");
+    --cds-svg-dash: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath stroke='%23161616' stroke-width='1.75' d='M4 8h8'/%3e%3c/svg%3e");
+    --cds-svg-radio: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-9 -9 18 18'%3e%3ccircle r='4' fill='%23f4f4f4'/%3e%3c/svg%3e");
+}
+
 :root[data-glpi-theme^="carbon_"] {
+    --cds-svg-knob: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3e%3ccircle r='9' fill='%23ffffff'/%3e%3c/svg%3e");
+
+    /* Type: body-compact-01 (14px/18px), headings 01-05 */
     --tblr-font-sans-serif: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
     --tblr-body-font-family: var(--tblr-font-sans-serif);
+    --tblr-body-font-size: 0.875rem;
+    --tblr-body-line-height: 1.28572;
+    --tblr-font-weight-medium: 400;
+    --tblr-font-weight-bold: 600;
+    --tblr-font-weight-headings: 400;
+    --tblr-font-size-h1: 2rem;
+    --tblr-font-size-h2: 1.75rem;
+    --tblr-font-size-h3: 1.25rem;
+    --tblr-font-size-h4: 1rem;
+    --tblr-font-size-h5: 0.875rem;
+    --tblr-font-size-h6: 0.75rem;
+
+    /* Shapes: square corners, flat surfaces (tags stay pill shaped) */
     --tblr-border-radius-scale: 0;
     --tblr-border-radius: 0;
     --tblr-border-radius-sm: 0;
@@ -68,72 +100,1074 @@
     --tblr-border-radius-lg: 0;
     --tblr-border-radius-xl: 0;
     --tblr-border-radius-xxl: 0;
+    --tblr-border-radius-pill: 1rem;
     --tblr-box-shadow: none;
     --tblr-box-shadow-card: none;
-    --tblr-box-shadow-dropdown: 0 2px 6px rgba(0, 0, 0, 0.3);
+    --tblr-box-shadow-input: none;
+    --tblr-box-shadow-dropdown: 0 2px 6px var(--cds-shadow);
+
+    /* Spacing: Carbon 16px layout grid */
+    --tblr-card-spacer-x: 1rem;
+    --tblr-card-spacer-y: 1rem;
+    --tblr-bg-forms: var(--cds-field);
 }
+
+/* ---------------------------------------------------------------------- */
+/* Typography                                                             */
+/* ---------------------------------------------------------------------- */
 
 :root[data-glpi-theme^="carbon_"] body {
     font-family: var(--tblr-font-sans-serif);
+    font-size: 0.875rem;
+    line-height: 1.28572;
     letter-spacing: 0.16px;
 }
 
-/* Flat surfaces */
-:root[data-glpi-theme^="carbon_"] .card,
-:root[data-glpi-theme^="carbon_"] .btn,
-:root[data-glpi-theme^="carbon_"] .nav-tabs .nav-link {
-    border-radius: 0;
-    box-shadow: none;
+:root[data-glpi-theme^="carbon_"] :is(h1, .h1) { font-weight: 400; line-height: 1.25; letter-spacing: 0; }
+:root[data-glpi-theme^="carbon_"] :is(h2, .h2) { font-weight: 400; line-height: 1.28572; letter-spacing: 0; }
+:root[data-glpi-theme^="carbon_"] :is(h3, .h3) { font-weight: 400; line-height: 1.4; letter-spacing: 0; }
+:root[data-glpi-theme^="carbon_"] :is(h4, .h4, .card-title) { font-weight: 600; line-height: 1.5; letter-spacing: 0; }
+:root[data-glpi-theme^="carbon_"] :is(h5, .h5, h6, .h6) { font-weight: 600; letter-spacing: 0.16px; }
+
+:root[data-glpi-theme^="carbon_"] :is(b, strong, .fw-bold) {
+    font-weight: 600;
 }
 
-/* Buttons */
-:root[data-glpi-theme^="carbon_"] .btn {
+/* label-01 */
+:root[data-glpi-theme^="carbon_"] :is(.form-label, .col-form-label) {
+    font-size: 0.75rem;
     font-weight: 400;
+    line-height: 1.33333;
+    letter-spacing: 0.32px;
+    color: var(--cds-text-secondary);
 }
 
-:root[data-glpi-theme^="carbon_"] .btn-primary {
-    --tblr-btn-color: #ffffff;
-    --tblr-btn-bg: var(--cds-button-primary);
-    --tblr-btn-border-color: transparent;
-    --tblr-btn-hover-color: #ffffff;
-    --tblr-btn-hover-bg: var(--cds-button-primary-hover);
-    --tblr-btn-hover-border-color: transparent;
-    --tblr-btn-active-color: #ffffff;
-    --tblr-btn-active-bg: var(--cds-button-primary-active);
-    --tblr-btn-active-border-color: transparent;
+:root[data-glpi-theme^="carbon_"] :is(.form-text, .form-hint) {
+    font-size: 0.75rem;
+    letter-spacing: 0.32px;
+    color: var(--cds-text-helper);
 }
 
-:root[data-glpi-theme^="carbon_"] .btn-secondary {
-    --tblr-btn-color: #ffffff;
-    --tblr-btn-bg: var(--cds-button-secondary);
-    --tblr-btn-border-color: transparent;
-    --tblr-btn-hover-color: #ffffff;
-    --tblr-btn-hover-bg: var(--cds-button-secondary-hover);
-    --tblr-btn-hover-border-color: transparent;
+:root[data-glpi-theme^="carbon_"] a:not(.btn, .nav-link, .dropdown-item, .page-link, .list-group-item) {
+    color: var(--cds-link-primary);
 }
 
-/* Fields: filled background with a bottom border */
-:root[data-glpi-theme^="carbon_"] .form-control,
-:root[data-glpi-theme^="carbon_"] .form-select,
-:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection {
-    background-color: var(--cds-field);
-    border-color: transparent;
-    border-bottom-color: var(--cds-border-strong-01);
-    border-radius: 0;
-    box-shadow: none;
+:root[data-glpi-theme^="carbon_"] a:not(.btn, .nav-link, .dropdown-item, .page-link, .list-group-item):hover {
+    color: var(--cds-link-primary-hover);
 }
 
-/* 2px focus outline instead of the Tabler focus ring */
+/* ---------------------------------------------------------------------- */
+/* Focus: 2px outline, inset                                              */
+/* ---------------------------------------------------------------------- */
+
 :root[data-glpi-theme^="carbon_"] :focus-visible,
-:root[data-glpi-theme^="carbon_"] .form-control:focus,
-:root[data-glpi-theme^="carbon_"] .form-select:focus,
-:root[data-glpi-theme^="carbon_"] .form-check-input:focus,
-:root[data-glpi-theme^="carbon_"] .select2-container--focus .select2-selection {
+:root[data-glpi-theme^="carbon_"] :is(.form-control, .form-select, .form-check-input):focus,
+:root[data-glpi-theme^="carbon_"] .select2-container--focus .select2-selection,
+:root[data-glpi-theme^="carbon_"] .select2-container--open .select2-selection {
     outline: 2px solid var(--cds-focus);
     outline-offset: -2px;
     box-shadow: none;
 }
 
-:root[data-glpi-theme^="carbon_"] .btn-primary:focus-visible {
+/* ---------------------------------------------------------------------- */
+/* Fields: text input, select, textarea, select2                          */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] :is(.form-control, .form-select),
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection {
+    min-height: 2.5rem;
+    font-size: 0.875rem;
+    line-height: 1.28572;
+    letter-spacing: 0.16px;
+    color: var(--cds-text-primary);
+    background-color: var(--cds-field);
+    border: 0;
+    border-bottom: 1px solid var(--cds-border-strong-01);
+    border-radius: 0;
+    box-shadow: none;
+    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9), outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+:root[data-glpi-theme^="carbon_"] .form-control {
+    padding: 0 1rem;
+}
+
+:root[data-glpi-theme^="carbon_"] textarea.form-control {
+    min-height: 2.5rem;
+    padding: 0.6875rem 1rem;
+}
+
+:root[data-glpi-theme^="carbon_"] :is(.form-control, .form-select):hover:not(:disabled, [readonly]),
+:root[data-glpi-theme^="carbon_"] .select2-container:not(.select2-container--disabled) .select2-selection:hover {
+    background-color: var(--cds-field-hover);
+}
+
+:root[data-glpi-theme^="carbon_"] :is(.form-control, .form-select)::placeholder {
+    color: var(--cds-text-placeholder);
+}
+
+:root[data-glpi-theme^="carbon_"] :is(.form-control, .form-select):disabled,
+:root[data-glpi-theme^="carbon_"] .select2-container--disabled .select2-selection {
+    color: var(--cds-text-disabled);
+    border-bottom-color: transparent;
+    cursor: not-allowed;
+}
+
+:root[data-glpi-theme^="carbon_"] :is(.form-control, .form-select).is-invalid {
+    outline: 2px solid var(--cds-support-error);
+    outline-offset: -2px;
+    background-image: none;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-control-sm,
+:root[data-glpi-theme^="carbon_"] .form-select-sm {
+    min-height: 2rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-control-lg,
+:root[data-glpi-theme^="carbon_"] .form-select-lg {
+    min-height: 3rem;
+}
+
+/* Select: Carbon chevron */
+:root[data-glpi-theme^="carbon_"] .form-select {
+    padding: 0 3rem 0 1rem;
+    --tblr-form-select-bg-img: var(--cds-svg-chevron);
+    background-position: right 1rem center;
+    background-size: 1rem 1rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection--single {
+    height: 2.5rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 2.5rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection--single .select2-selection__arrow {
+    height: 2.5rem;
+    width: 2.5rem;
+    right: 0;
+    top: 0;
+    background: var(--cds-svg-chevron) no-repeat center / 1rem 1rem;
+    transition: transform 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-container--open .select2-selection--single .select2-selection__arrow {
+    transform: rotate(180deg);
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection__arrow b {
+    display: none;
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection--multiple {
+    padding: 0.25rem 0.5rem;
+}
+
+/* Multi select values as Carbon tags */
+:root[data-glpi-theme^="carbon_"] .select2-container .select2-selection--multiple .select2-selection__choice {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: 0 0.5rem;
+    margin: 0.125rem 0.25rem 0.125rem 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.32px;
+    color: var(--cds-tag-color);
+    background-color: var(--cds-tag-background);
+    border: 0;
+    border-radius: 1rem;
+}
+
+/* Select2 list box */
+:root[data-glpi-theme^="carbon_"] .select2-dropdown {
+    background-color: var(--cds-layer-01);
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 2px 6px var(--cds-shadow);
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-results__option {
+    min-height: 2.5rem;
+    padding: 0.6875rem 1rem;
+    font-size: 0.875rem;
+    color: var(--cds-text-secondary);
+    border-bottom: 1px solid var(--cds-border-subtle-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-results__option--highlighted,
+:root[data-glpi-theme^="carbon_"] .select2-results__option--highlighted[aria-selected] {
+    color: var(--cds-text-primary);
+    background-color: var(--cds-layer-hover-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-results__option[aria-selected="true"],
+:root[data-glpi-theme^="carbon_"] .select2-results__option--selected {
+    color: var(--cds-text-primary);
+    background-color: var(--cds-layer-selected-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .select2-search--dropdown .select2-search__field {
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    background-color: var(--cds-field);
+    border: 0;
+    border-bottom: 1px solid var(--cds-border-strong-01);
+}
+
+/* Add-on buttons next to fields (i, +, map): attached small (32px wide) icon buttons */
+:root[data-glpi-theme^="carbon_"] .field-container .btn-group > .btn,
+:root[data-glpi-theme^="carbon_"] .input-group > .btn,
+:root[data-glpi-theme^="carbon_"] .input-group > .input-group-text {
+    min-width: 2rem;
+    min-height: 2.5rem;
+    padding: 0 0.5rem;
+    justify-content: center;
+    color: var(--cds-icon-primary);
+    background-color: var(--cds-field);
+    border: 0;
+    border-bottom: 1px solid var(--cds-border-strong-01);
+    border-left: 1px solid var(--cds-border-subtle-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .field-container .btn-group > .btn:hover,
+:root[data-glpi-theme^="carbon_"] .input-group > .btn:hover {
+    background-color: var(--cds-field-hover);
+}
+
+:root[data-glpi-theme^="carbon_"] .input-group-flat > .input-group-text {
+    border-left: 0;
+}
+
+/* Let the select fill the space left by the add-on buttons (GLPI sizes it for narrower buttons) */
+:root[data-glpi-theme^="carbon_"] .field-container .btn-group > .select2-container {
+    flex: 1 1 auto;
+    width: auto !important;
+    min-width: 0;
+}
+
+/* Narrow columns: less padding in selects that share their row with add-on buttons */
+:root[data-glpi-theme^="carbon_"] .field-container .btn-group > .select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 0.75rem;
+    padding-right: 2rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .field-container .btn-group > .select2-container .select2-selection--single .select2-selection__arrow {
+    width: 2rem;
+}
+
+/* File input: Carbon secondary button + file name */
+:root[data-glpi-theme^="carbon_"] .form-control[type="file"] {
+    padding: 0;
+    line-height: 2.5rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-control[type="file"]::file-selector-button {
+    height: 2.5rem;
+    margin: 0 1rem 0 0;
+    padding: 0 1rem;
+    color: var(--cds-text-on-color);
+    background-color: var(--cds-button-secondary);
+    border: 0;
+    border-radius: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-control[type="file"]:hover:not(:disabled)::file-selector-button {
+    background-color: var(--cds-button-secondary-hover);
+}
+
+/* Rich text editor (TinyMCE) as a Carbon text area */
+:root[data-glpi-theme^="carbon_"] .tox.tox-tinymce {
+    border: 0;
+    border-bottom: 1px solid var(--cds-border-strong-01);
+    border-radius: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .tox :is(.tox-editor-header, .tox-toolbar-overlord, .tox-toolbar, .tox-toolbar__primary, .tox-toolbar__overflow, .tox-statusbar, .tox-edit-area) {
+    background: var(--cds-field) !important;
+    border-color: var(--cds-border-subtle-01) !important;
+    box-shadow: none !important;
+}
+
+:root[data-glpi-theme^="carbon_"] .tox :is(.tox-tbtn, .tox-split-button, .tox-toolbar__group) {
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
+:root[data-glpi-theme^="carbon_"] .tox :is(.tox-tbtn, .tox-split-button):hover {
+    background: var(--cds-field-hover) !important;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Checkbox, radio, toggle                                                */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] .form-check-input[type="checkbox"]:not(.form-switch *) {
+    width: 1rem;
+    height: 1rem;
+    background-color: transparent;
+    border: 1px solid var(--cds-icon-primary);
+    border-radius: 2px;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-check-input[type="checkbox"]:not(.form-switch *):checked {
+    --tblr-form-check-bg-image: var(--cds-svg-check);
+    background-color: var(--cds-icon-primary);
+    border-color: var(--cds-icon-primary);
+}
+
+:root[data-glpi-theme^="carbon_"] .form-check-input[type="checkbox"]:not(.form-switch *):indeterminate {
+    --tblr-form-check-bg-image: var(--cds-svg-dash);
+    background-color: var(--cds-icon-primary);
+    border-color: var(--cds-icon-primary);
+}
+
+:root[data-glpi-theme^="carbon_"] .form-check-input[type="radio"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    background-color: transparent;
+    border: 1px solid var(--cds-icon-primary);
+}
+
+:root[data-glpi-theme^="carbon_"] .form-check-input[type="radio"]:checked {
+    --tblr-form-check-bg-image: var(--cds-svg-radio);
+    background-color: transparent;
+    border-color: var(--cds-icon-primary);
+}
+
+/* Toggle: 48x24, gray when off, green when on */
+:root[data-glpi-theme^="carbon_"] .form-switch .form-check-input {
+    --tblr-form-switch-bg: var(--cds-svg-knob);
+    width: 3rem;
+    height: 1.5rem;
+    background-color: var(--cds-toggle-off);
+    background-size: 1.5rem 1.5rem;
+    border: 0;
+    border-radius: 1rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-switch .form-check-input:checked {
+    --tblr-form-switch-bg: var(--cds-svg-knob);
+    background-color: var(--cds-support-success);
+}
+
+:root[data-glpi-theme^="carbon_"] .form-switch {
+    min-height: 1.5rem;
+    padding-left: 3.75rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-switch .form-check-input {
+    margin-left: -3.75rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Buttons: primary, secondary, tertiary, ghost, danger                   */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] .btn {
+    --tblr-btn-font-weight: 400;
+    --tblr-btn-box-shadow: none;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    font-size: 0.875rem;
+    line-height: 1.28572;
+    letter-spacing: 0.16px;
+    border-width: 1px;
+    border-radius: 0;
+    box-shadow: none;
+    transition: background-color 70ms cubic-bezier(0, 0, 0.38, 0.9), border-color 70ms cubic-bezier(0, 0, 0.38, 0.9), color 70ms cubic-bezier(0, 0, 0.38, 0.9);
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-sm {
+    min-height: 2rem;
+    padding: 0 0.75rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-lg {
+    min-height: 3rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-icon {
+    min-width: 2.5rem;
+    padding: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-sm.btn-icon {
+    min-width: 2rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-primary {
+    --tblr-btn-color: var(--cds-text-on-color);
+    --tblr-btn-bg: var(--cds-button-primary);
+    --tblr-btn-border-color: transparent;
+    --tblr-btn-hover-color: var(--cds-text-on-color);
+    --tblr-btn-hover-bg: var(--cds-button-primary-hover);
+    --tblr-btn-hover-border-color: transparent;
+    --tblr-btn-active-color: var(--cds-text-on-color);
+    --tblr-btn-active-bg: var(--cds-button-primary-active);
+    --tblr-btn-active-border-color: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-secondary {
+    --tblr-btn-color: var(--cds-text-on-color);
+    --tblr-btn-bg: var(--cds-button-secondary);
+    --tblr-btn-border-color: transparent;
+    --tblr-btn-hover-color: var(--cds-text-on-color);
+    --tblr-btn-hover-bg: var(--cds-button-secondary-hover);
+    --tblr-btn-hover-border-color: transparent;
+    --tblr-btn-active-color: var(--cds-text-on-color);
+    --tblr-btn-active-bg: #6f6f6f;
+    --tblr-btn-active-border-color: transparent;
+}
+
+/* Tertiary */
+:root[data-glpi-theme^="carbon_"] :is(.btn-outline-primary, .btn-outline-info) {
+    --tblr-btn-color: var(--cds-button-tertiary);
+    --tblr-btn-bg: transparent;
+    --tblr-btn-border-color: var(--cds-button-tertiary);
+    --tblr-btn-hover-color: var(--cds-icon-inverse);
+    --tblr-btn-hover-bg: var(--cds-button-tertiary-hover);
+    --tblr-btn-hover-border-color: var(--cds-button-tertiary-hover);
+    --tblr-btn-active-color: var(--cds-icon-inverse);
+    --tblr-btn-active-bg: var(--cds-button-primary-active);
+    --tblr-btn-active-border-color: var(--cds-button-primary-active);
+}
+
+/* Ghost */
+:root[data-glpi-theme^="carbon_"] :is(.btn-outline-secondary, .btn-ghost-secondary, .btn-ghost-primary, .btn-ghost-dark, .btn-outline-dark, .btn-light) {
+    --tblr-btn-color: var(--cds-text-primary);
+    --tblr-btn-bg: transparent;
+    --tblr-btn-border-color: transparent;
+    --tblr-btn-hover-color: var(--cds-text-primary);
+    --tblr-btn-hover-bg: var(--cds-layer-hover-01);
+    --tblr-btn-hover-border-color: transparent;
+    --tblr-btn-active-color: var(--cds-text-primary);
+    --tblr-btn-active-bg: var(--cds-layer-selected-01);
+    --tblr-btn-active-border-color: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-ghost-primary {
+    --tblr-btn-color: var(--cds-link-primary);
+    --tblr-btn-hover-color: var(--cds-link-primary-hover);
+}
+
+/* Danger and danger tertiary (GLPI uses outline-warning for "move to trash") */
+:root[data-glpi-theme^="carbon_"] .btn-danger {
+    --tblr-btn-color: var(--cds-text-on-color);
+    --tblr-btn-bg: var(--cds-button-danger);
+    --tblr-btn-border-color: transparent;
+    --tblr-btn-hover-color: var(--cds-text-on-color);
+    --tblr-btn-hover-bg: var(--cds-button-danger-hover);
+    --tblr-btn-hover-border-color: transparent;
+    --tblr-btn-active-color: var(--cds-text-on-color);
+    --tblr-btn-active-bg: var(--cds-button-danger-active);
+    --tblr-btn-active-border-color: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] :is(.btn-outline-danger, .btn-outline-warning, .btn-ghost-danger) {
+    --tblr-btn-color: var(--cds-button-danger);
+    --tblr-btn-bg: transparent;
+    --tblr-btn-border-color: var(--cds-button-danger);
+    --tblr-btn-hover-color: var(--cds-text-on-color);
+    --tblr-btn-hover-bg: var(--cds-button-danger-hover);
+    --tblr-btn-hover-border-color: var(--cds-button-danger-hover);
+    --tblr-btn-active-color: var(--cds-text-on-color);
+    --tblr-btn-active-bg: var(--cds-button-danger-active);
+    --tblr-btn-active-border-color: var(--cds-button-danger-active);
+}
+
+:root[data-glpi-theme="carbon_dark"] :is(.btn-outline-danger, .btn-outline-warning, .btn-ghost-danger) {
+    --tblr-btn-color: var(--cds-support-error);
+    --tblr-btn-border-color: var(--cds-support-error);
+}
+
+:root[data-glpi-theme^="carbon_"] .btn:disabled,
+:root[data-glpi-theme^="carbon_"] .btn.disabled {
+    --tblr-btn-disabled-color: var(--cds-text-disabled);
+    --tblr-btn-disabled-bg: var(--cds-button-disabled);
+    --tblr-btn-disabled-border-color: transparent;
+    opacity: 1;
+}
+
+:root[data-glpi-theme^="carbon_"] :is(.btn-outline-secondary, .btn-ghost-secondary, .btn-outline-danger, .btn-outline-warning, .btn-outline-primary):disabled {
+    --tblr-btn-disabled-bg: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .btn-primary:focus-visible,
+:root[data-glpi-theme^="carbon_"] .btn-secondary:focus-visible,
+:root[data-glpi-theme^="carbon_"] .btn-danger:focus-visible {
+    outline: 0;
+    border-color: var(--cds-focus);
     box-shadow: inset 0 0 0 1px var(--cds-focus), inset 0 0 0 2px var(--cds-focus-inset);
+}
+
+/* Header toolbar: keep GLPI's compact size so breadcrumbs do not wrap */
+:root[data-glpi-theme^="carbon_"] .navbar:not(.navbar-vertical) .btn-sm {
+    min-height: 2rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.32px;
+}
+
+/* Form action bars: 48px buttons, label left / icon right */
+:root[data-glpi-theme^="carbon_"] .form-button-separator .btn,
+:root[data-glpi-theme^="carbon_"] .modal-footer .btn:not(.btn-icon) {
+    min-height: 3rem;
+    min-width: 10rem;
+    padding: 0 1rem;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-button-separator .btn .ti,
+:root[data-glpi-theme^="carbon_"] .modal-footer .btn .ti {
+    margin: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .form-button-separator .btn.me-2 {
+    margin-right: 1px !important;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tabs                                                                   */
+/* ---------------------------------------------------------------------- */
+
+/* Vertical item tabs: contained style with 3px selection indicator */
+:root[data-glpi-theme^="carbon_"] .card-tabs #tabspanel.nav-tabs .nav-link {
+    min-height: 2.5rem;
+    font-weight: 400;
+    color: var(--cds-text-secondary);
+    border-color: transparent !important;
+}
+
+:root[data-glpi-theme^="carbon_"] .card-tabs #tabspanel.nav-tabs .nav-link:hover:not(.active) {
+    color: var(--cds-text-primary);
+    background: var(--cds-layer-accent-hover-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .card-tabs #tabspanel.nav-tabs .nav-link.active {
+    font-weight: 600;
+    color: var(--cds-text-primary);
+}
+
+:root[data-glpi-theme^="carbon_"] .card-tabs.vertical #tabspanel.nav-tabs .nav-link.active {
+    border-left-width: 3px !important;
+    border-left-color: var(--cds-border-interactive) !important;
+}
+
+:root[data-glpi-theme^="carbon_"] .card-tabs.horizontal #tabspanel.nav-tabs .nav-link.active {
+    box-shadow: inset 0 2px 0 var(--cds-border-interactive);
+}
+
+/* Other tabs: line style */
+:root[data-glpi-theme^="carbon_"] .nav-tabs:not(#tabspanel) {
+    border-bottom: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .nav-tabs:not(#tabspanel) .nav-link {
+    padding: 0.6875rem 1rem;
+    color: var(--cds-text-secondary);
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid var(--cds-border-subtle-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .nav-tabs:not(#tabspanel) .nav-link:hover {
+    color: var(--cds-text-primary);
+    border-bottom-color: var(--cds-border-strong-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .nav-tabs:not(#tabspanel) .nav-link.active {
+    font-weight: 600;
+    color: var(--cds-text-primary);
+    border-bottom-color: var(--cds-border-interactive);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Data tables                                                            */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] .table {
+    --tblr-table-bg: var(--cds-layer-01);
+    --tblr-table-striped-bg: var(--cds-layer-01);
+    --tblr-table-hover-bg: var(--cds-layer-hover-01);
+    --tblr-table-active-bg: var(--cds-layer-selected-01);
+    --tblr-table-border-color: var(--cds-border-subtle-01);
+    font-size: 0.875rem;
+    letter-spacing: 0.16px;
+    color: var(--cds-text-secondary);
+}
+
+:root[data-glpi-theme^="carbon_"] .table > thead > tr > th,
+:root[data-glpi-theme^="carbon_"] .table > thead > tr > td {
+    height: 2.5rem;
+    padding: 0 1rem;
+    vertical-align: middle;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.28572;
+    letter-spacing: 0.16px;
+    text-transform: none;
+    color: var(--cds-text-primary);
+    background-color: var(--cds-layer-accent-01);
+    border-bottom: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .table > tbody > tr > td,
+:root[data-glpi-theme^="carbon_"] .table > tbody > tr > th {
+    height: 2.5rem;
+    padding: 0.4375rem 1rem;
+    vertical-align: middle;
+    border-top: 1px solid var(--cds-layer-01);
+    border-bottom: 1px solid var(--cds-border-subtle-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .table > tbody > tr:hover > * {
+    color: var(--cds-text-primary);
+}
+
+:root[data-glpi-theme^="carbon_"] .table > :is(thead, tbody) > tr > :first-child:has(> div > .form-check-input),
+:root[data-glpi-theme^="carbon_"] .table > :is(thead, tbody) > tr > :first-child:has(> .form-check-input) {
+    padding: 0 0.5rem 0 1rem;
+}
+
+/* GLPI search results: keep GLPI's compact font below 1900px, fix the top aligned sticky header */
+:root[data-glpi-theme^="carbon_"] .search_page .search-container .search-card .search-results > thead > tr > th {
+    vertical-align: middle !important;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .search_page .search-container .search-card .search-results > :is(thead, tbody) > tr > :first-child {
+    padding-left: 1rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Cards (tiles), dropdown menus, modals                                  */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] .card {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+:root[data-glpi-theme^="carbon_"] .card-header {
+    border-bottom: 1px solid var(--cds-border-subtle-00);
+}
+
+:root[data-glpi-theme^="carbon_"] .card-footer {
+    border-top: 1px solid var(--cds-border-subtle-00);
+}
+
+:root[data-glpi-theme^="carbon_"] .dropdown-menu {
+    --tblr-dropdown-bg: var(--cds-layer-01);
+    --tblr-dropdown-link-hover-bg: var(--cds-layer-hover-01);
+    --tblr-dropdown-link-active-bg: var(--cds-layer-selected-01);
+    --tblr-dropdown-link-active-color: var(--cds-text-primary);
+    padding: 0.25rem 0;
+    background-color: var(--cds-layer-01);
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 2px 6px var(--cds-shadow);
+}
+
+:root[data-glpi-theme^="carbon_"] .dropdown-item {
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: var(--cds-text-secondary);
+}
+
+:root[data-glpi-theme^="carbon_"] .dropdown-item:hover {
+    color: var(--cds-text-primary);
+    background-color: var(--cds-layer-hover-01);
+}
+
+:root[data-glpi-theme^="carbon_"] #navbar-menu .dropdown-item {
+    min-height: 2rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .dropdown-header {
+    font-size: 0.75rem;
+    letter-spacing: 0.32px;
+    text-transform: none;
+    color: var(--cds-text-secondary);
+}
+
+:root[data-glpi-theme^="carbon_"] .modal-content {
+    background-color: var(--cds-layer-01);
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 2px 6px var(--cds-shadow);
+}
+
+:root[data-glpi-theme^="carbon_"] .modal-header {
+    padding: 1rem 1rem 0.5rem;
+    border-bottom: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .modal-title {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+:root[data-glpi-theme^="carbon_"] .modal-footer {
+    border-top: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Inline notifications, tags, pagination                                 */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] .alert {
+    --cds-alert-color: var(--cds-support-info);
+    --cds-alert-bg: var(--cds-notification-info);
+    color: var(--cds-text-primary);
+    background: var(--cds-alert-bg);
+    border: 1px solid color-mix(in srgb, var(--cds-alert-color), transparent 60%);
+    border-left: 3px solid var(--cds-alert-color);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+:root[data-glpi-theme^="carbon_"] .alert-danger {
+    --cds-alert-color: var(--cds-support-error);
+    --cds-alert-bg: var(--cds-notification-error);
+}
+
+:root[data-glpi-theme^="carbon_"] .alert-success {
+    --cds-alert-color: var(--cds-support-success);
+    --cds-alert-bg: var(--cds-notification-success);
+}
+
+:root[data-glpi-theme^="carbon_"] .alert-warning {
+    --cds-alert-color: var(--cds-support-warning);
+    --cds-alert-bg: var(--cds-notification-warning);
+}
+
+:root[data-glpi-theme^="carbon_"] .alert .alert-icon,
+:root[data-glpi-theme^="carbon_"] .alert > .ti:first-child {
+    color: var(--cds-alert-color);
+}
+
+:root[data-glpi-theme^="carbon_"] .badge {
+    min-height: 1.5rem;
+    padding: 0 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.33333;
+    letter-spacing: 0.32px;
+    border-radius: 1rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .badge:empty {
+    min-height: 0;
+    padding: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .page-link {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cds-text-secondary);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+}
+
+:root[data-glpi-theme^="carbon_"] .page-link:hover {
+    color: var(--cds-text-primary);
+    background: var(--cds-layer-hover-01);
+}
+
+:root[data-glpi-theme^="carbon_"] .page-item.active .page-link {
+    font-weight: 600;
+    color: var(--cds-text-primary);
+    background: transparent;
+    box-shadow: inset 0 -4px 0 var(--cds-border-interactive);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Layout spacing                                                         */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] .form-field.mb-2 {
+    margin-bottom: 1rem !important;
+}
+
+/* ---------------------------------------------------------------------- */
+/* UI shell: header and side nav (always Gray 100, like Carbon)           */
+/* ---------------------------------------------------------------------- */
+
+:root[data-glpi-theme^="carbon_"] {
+    --cds-shell-bg: #161616;
+    --cds-shell-field: #262626;
+    --cds-shell-text: #c6c6c6;
+    --cds-shell-text-active: #f4f4f4;
+    --cds-shell-text-muted: #8d8d8d;
+    --cds-shell-hover: #333333;
+    --cds-shell-selected: #393939;
+    --cds-shell-border: #393939;
+    --cds-shell-border-strong: #6f6f6f;
+    --cds-shell-interactive: #4589ff;
+}
+
+/* Side nav: brand area aligned with the 48px header */
+:root[data-glpi-theme^="carbon_"] .sidebar {
+    border-right: 1px solid var(--cds-shell-border);
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar .navbar-brand {
+    height: 3rem;
+    padding: 0 1rem;
+    margin: 0 0 0.5rem;
+    border-bottom: 1px solid var(--cds-shell-border);
+}
+
+:root[data-glpi-theme^="carbon_"] body:not(.navbar-collapsed) .sidebar .navbar-brand {
+    justify-content: flex-start;
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar .glpi-logo {
+    height: 1.5rem;
+    width: 4.5rem;
+    background-size: contain;
+    background-position: left center;
+}
+
+/* Side nav items: 32px, gray text, white when hovered or current */
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link {
+    min-height: 2rem;
+    padding: 0 1rem 0 calc(1rem - 3px) !important;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.28572;
+    letter-spacing: 0.16px;
+    color: var(--cds-shell-text);
+    background-color: transparent;
+    border-left: 3px solid transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link:is(.show, .active) {
+    color: var(--cds-shell-text-active);
+    font-weight: 600;
+    border-left-color: transparent;
+}
+
+/* Tabler's full-height indicator next to the open group; Carbon only marks the current item */
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item::after {
+    display: none;
+}
+
+/* Collapsed group that contains the current page */
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link.active:not(.show) {
+    background-color: var(--cds-shell-selected);
+    border-left-color: var(--cds-shell-interactive);
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item:hover .nav-link,
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link:hover {
+    color: var(--cds-shell-text-active);
+    background-color: var(--cds-shell-hover);
+    border-left-color: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link i {
+    margin-right: 0.75rem;
+    font-size: 1rem;
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link:is(.active, .show) + .dropdown-menu {
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link:is(.active, .show) + .dropdown-menu .dropdown-item {
+    min-height: 2rem;
+    padding: 0.4375rem 1rem 0.4375rem calc(2.75rem - 3px);
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.28572;
+    color: var(--cds-shell-text);
+    background-color: transparent;
+    border-left: 3px solid transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link:is(.active, .show) + .dropdown-menu .dropdown-item:hover {
+    color: var(--cds-shell-text-active);
+    background-color: var(--cds-shell-hover);
+    border-left-color: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .nav-item .nav-link:is(.active, .show) + .dropdown-menu .dropdown-item.active {
+    font-weight: 600;
+    color: var(--cds-shell-text-active);
+    background-color: var(--cds-shell-selected);
+    border-left-color: var(--cds-shell-interactive);
+}
+
+:root[data-glpi-theme^="carbon_"] .sidebar #navbar-menu .dropdown-item i {
+    font-size: 1rem;
+}
+
+/* Collapsed (rail) mode: flyout menus as dark Carbon menus */
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link {
+    min-height: 3rem;
+    padding: 0 1rem 0 calc(1.5rem - 3px) !important;
+}
+
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item.active {
+    background-color: transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link.active {
+    background-color: var(--cds-shell-selected);
+    border-left-color: var(--cds-shell-interactive);
+}
+
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link + .dropdown-menu {
+    padding: 0;
+    color: var(--cds-shell-text);
+    background-color: var(--cds-shell-field) !important;
+    border: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link + .dropdown-menu .dropdown-header {
+    padding: 0.75rem 1rem 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--cds-shell-text-active);
+}
+
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link + .dropdown-menu .dropdown-item {
+    min-height: 2rem;
+    padding: 0.4375rem 1rem;
+    color: var(--cds-shell-text);
+    background-color: transparent;
+    border-left: 3px solid transparent;
+}
+
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link + .dropdown-menu .dropdown-item:hover {
+    color: var(--cds-shell-text-active);
+    background-color: var(--cds-shell-hover);
+}
+
+:root[data-glpi-theme^="carbon_"] body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link + .dropdown-menu .dropdown-item.active {
+    color: var(--cds-shell-text-active);
+    background-color: var(--cds-shell-selected);
+    border-left-color: var(--cds-shell-interactive);
+}
+
+/* Ghost buttons in the side nav ("Search menu", "Collapse menu") */
+:root[data-glpi-theme^="carbon_"] .sidebar .btn-ghost-secondary {
+    --tblr-btn-color: var(--cds-shell-text);
+    --tblr-btn-hover-color: var(--cds-shell-text-active);
+    --tblr-btn-hover-bg: var(--cds-shell-hover);
+    --tblr-btn-active-color: var(--cds-shell-text-active);
+    --tblr-btn-active-bg: var(--cds-shell-selected);
+    min-height: 2rem;
+    color: var(--cds-shell-text);
+}
+
+/* Header (vertical layout): 48px, Gray 100 */
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar {
+    --tblr-navbar-color: var(--cds-shell-text);
+    --tblr-navbar-hover-color: var(--cds-shell-text-active);
+    --tblr-navbar-active-color: var(--cds-shell-text-active);
+    --tblr-navbar-border-color: var(--cds-shell-border);
+    min-height: 3rem;
+    padding: 0;
+    color: var(--cds-shell-text);
+    background-color: var(--cds-shell-bg);
+    border-bottom: 1px solid var(--cds-shell-border);
+    box-shadow: none !important;
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar :is(.border-start, .border-left) {
+    border-color: var(--cds-shell-border) !important;
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .breadcrumb-item,
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .breadcrumb-item a {
+    color: var(--cds-shell-text);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .breadcrumb-item a:hover {
+    color: var(--cds-shell-text-active);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--cds-shell-text-muted);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .btn-ghost-secondary {
+    --tblr-btn-color: var(--cds-shell-text);
+    --tblr-btn-hover-color: var(--cds-shell-text-active);
+    --tblr-btn-hover-bg: var(--cds-shell-hover);
+    --tblr-btn-active-color: var(--cds-shell-text-active);
+    --tblr-btn-active-bg: var(--cds-shell-selected);
+}
+
+/* Header search */
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar :is(.form-control, .input-group > .input-group-text) {
+    min-height: 3rem;
+    color: var(--cds-shell-text-active);
+    background-color: var(--cds-shell-field);
+    border-bottom-color: var(--cds-shell-border-strong);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .form-control:hover {
+    background-color: var(--cds-shell-hover);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .form-control::placeholder {
+    color: var(--cds-shell-text-muted);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .input-group-text .btn {
+    min-height: 3rem;
+    color: var(--cds-shell-text);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .input-group-text .btn:hover {
+    color: var(--cds-shell-text-active);
+}
+
+/* Header user menu */
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .user-menu .nav-link {
+    min-height: 3rem;
+    padding: 0 0 0 1rem !important;
+    color: var(--cds-shell-text-active) !important;
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .user-menu .nav-link:hover {
+    background-color: var(--cds-shell-hover);
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .user-menu .text-muted-menu {
+    color: var(--cds-shell-text) !important;
+}
+
+:root[data-glpi-theme^="carbon_"] body.vertical-layout header.navbar .user-menu .avatar {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Theme switch in the user menu */
+:root[data-glpi-theme^="carbon_"] .plugin-themeswitch .btn.active {
+    background-color: var(--cds-layer-selected-01);
+    box-shadow: inset 0 -2px 0 var(--cds-border-interactive);
 }
