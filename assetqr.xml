@@ -2,15 +2,15 @@
 <root>
     <name>Asset QR Codes</name>
     <key>assetqr</key>
-    <state>beta</state>
+    <state>stable</state>
     <logo>https://raw.githubusercontent.com/mbrigl/glpi-assetqr/main/assetqr.png</logo>
     <description>
         <short>
-            <en>Adds a QR code button to every asset. The encoded text is built from a configurable template of asset fields.</en>
-            <de>Fügt jedem Asset einen QR-Code-Button hinzu. Der kodierte Text wird aus einer konfigurierbaren Vorlage mit Asset-Feldern erzeugt.</de>
-            <fr>Ajoute un bouton de code QR à chaque actif. Le texte encodé est construit à partir d'un modèle configurable de champs de l'actif.</fr>
-            <it>Aggiunge un pulsante per il codice QR a ogni asset. Il testo codificato viene generato da un modello configurabile di campi dell'asset.</it>
-            <es>Añade un botón de código QR a cada activo. El texto codificado se genera a partir de una plantilla configurable de campos del activo.</es>
+            <en>Adds a QR code button to every asset. The encoded text is built from a configurable template of asset fields. QR code labels of several assets can be printed at once.</en>
+            <de>Fügt jedem Asset einen QR-Code-Button hinzu. Der kodierte Text wird aus einer konfigurierbaren Vorlage mit Asset-Feldern erzeugt. QR-Code-Etiketten mehrerer Assets lassen sich auf einmal drucken.</de>
+            <fr>Ajoute un bouton de code QR à chaque actif. Le texte encodé est construit à partir d'un modèle configurable de champs de l'actif. Les étiquettes de codes QR de plusieurs actifs peuvent être imprimées en une fois.</fr>
+            <it>Aggiunge un pulsante per il codice QR a ogni asset. Il testo codificato viene generato da un modello configurabile di campi dell'asset. Le etichette con i codici QR di più asset possono essere stampate in una volta.</it>
+            <es>Añade un botón de código QR a cada activo. El texto codificado se genera a partir de una plantilla configurable de campos del activo. Las etiquetas con códigos QR de varios activos se pueden imprimir de una vez.</es>
         </short>
         <long>
             <en><![CDATA[
@@ -31,6 +31,10 @@ Manufacturer: {manufacturers_id}
 - `{column}`: any field of the asset; foreign keys such as `{manufacturers_id}`, `{locations_id}` or `{users_id}` are resolved to their names
 - `{id}`, `{itemtype}`, `{url}` (link to the asset) and `{entity}`
 - Lines that are empty after substitution are dropped
+
+### Print labels of several assets
+Select assets in a list and choose the massive action **Print QR codes**: all labels are printed on one page (up to 500 at once).
+Label width and height, QR code size, font size, gap, text position (below / beside / none) and a cutting frame are configurable.
 
 Respects GLPI rights: the QR code is only available to users who can read the asset.
 ]]></en>
@@ -53,6 +57,10 @@ Hersteller: {manufacturers_id}
 - `{id}`, `{itemtype}`, `{url}` (Link zum Asset) und `{entity}`
 - Zeilen, die nach dem Ersetzen leer sind, entfallen
 
+### Etiketten mehrerer Assets drucken
+Assets in einer Liste auswählen und die Massenaktion **QR-Codes drucken** wählen: Alle Etiketten werden auf einer Seite gedruckt (bis zu 500 auf einmal).
+Etikettenbreite und -höhe, Größe des QR-Codes, Schriftgröße, Abstand, Position des Textes (unter / neben dem QR-Code / kein Text) und ein Schnittrahmen sind einstellbar.
+
 Berücksichtigt die GLPI-Rechte: Der QR-Code steht nur Benutzern zur Verfügung, die das Asset lesen dürfen.
 ]]></de>
             <fr><![CDATA[
@@ -73,6 +81,10 @@ Fabricant: {manufacturers_id}
 - `{colonne}` : tout champ de l'actif ; les clés étrangères comme `{manufacturers_id}`, `{locations_id}` ou `{users_id}` sont remplacées par leur nom
 - `{id}`, `{itemtype}`, `{url}` (lien vers l'actif) et `{entity}`
 - Les lignes vides après substitution sont supprimées
+
+### Imprimer les étiquettes de plusieurs actifs
+Sélectionnez des actifs dans une liste et choisissez l'action de masse **Imprimer les codes QR** : toutes les étiquettes sont imprimées sur une page (jusqu'à 500 à la fois).
+Largeur et hauteur des étiquettes, taille du code QR, taille de police, espacement, position du texte (sous / à côté du code QR / aucun) et cadre de découpe sont configurables.
 
 Respecte les droits GLPI : le code QR n'est disponible que pour les utilisateurs pouvant lire l'actif.
 ]]></fr>
@@ -95,6 +107,10 @@ Produttore: {manufacturers_id}
 - `{id}`, `{itemtype}`, `{url}` (link all'asset) e `{entity}`
 - Le righe vuote dopo la sostituzione vengono rimosse
 
+### Stampa delle etichette di più asset
+Selezionare gli asset in un elenco e scegliere l'azione massiva **Stampa codici QR**: tutte le etichette vengono stampate su una pagina (fino a 500 alla volta).
+Larghezza e altezza delle etichette, dimensione del codice QR, dimensione del carattere, spazio, posizione del testo (sotto / accanto al codice QR / nessuno) e cornice di taglio sono configurabili.
+
 Rispetta i diritti di GLPI: il codice QR è disponibile solo per gli utenti che possono leggere l'asset.
 ]]></it>
             <es><![CDATA[
@@ -116,6 +132,10 @@ Fabricante: {manufacturers_id}
 - `{id}`, `{itemtype}`, `{url}` (enlace al activo) y `{entity}`
 - Las líneas vacías tras la sustitución se eliminan
 
+### Imprimir etiquetas de varios activos
+Seleccione activos en una lista y elija la acción masiva **Imprimir códigos QR**: todas las etiquetas se imprimen en una página (hasta 500 a la vez).
+Ancho y alto de las etiquetas, tamaño del código QR, tamaño de fuente, espacio, posición del texto (debajo / junto al código QR / ninguno) y marco de corte son configurables.
+
 Respeta los permisos de GLPI: el código QR solo está disponible para los usuarios que pueden ver el activo.
 ]]></es>
         </long>
@@ -128,6 +148,11 @@ Respeta los permisos de GLPI: el código QR solo está disponible para los usuar
         <author>Markus Brigl</author>
     </authors>
     <versions>
+        <version>
+            <num>1.0.0</num>
+            <compatibility>~11.0.0</compatibility>
+            <download_url>https://github.com/mbrigl/glpi-assetqr/releases/download/v1.0.0/assetqr-1.0.0.tar.bz2</download_url>
+        </version>
         <version>
             <num>0.1.0</num>
             <compatibility>~11.0.0</compatibility>

@@ -82,7 +82,7 @@ The same checks run on GitHub for every push and pull request (`.github/workflow
 ## Release
 1. Bump `PLUGIN_ASSETQR_VERSION` in `setup.php` and add the version to `assetqr.xml`
    (`<num>`, `<compatibility>`, `<download_url>`).
-2. Commit, then tag and push: `git tag v0.1.0 && git push origin main v0.1.0`
+2. Commit, then tag and push: `git tag v1.0.0 && git push origin main v1.0.0`
 3. The GitHub workflow `.github/workflows/release.yml` builds `assetqr-<version>.tar.bz2`
    with `tools/release.sh` and attaches it to the GitHub release.
 
