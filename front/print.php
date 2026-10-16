@@ -39,19 +39,26 @@ Session::checkLoginUser();
 
 // Selection stored by the massive action "Print QR codes"
 $token = $_GET['token'] ?? null;
-$job   = is_string($token) ? ($_SESSION[QrCode::PRINT_SESSION_KEY][$token] ?? null) : null;
-if (!is_array($job)) {
+$job   = is_string($token) && preg_match('/^[0-9a-f]{32}$/', $token) === 1
+    ? ($_SESSION[QrCode::PRINT_SESSION_KEY][$token] ?? null)
+    : null;
+if (!is_array($job) || !is_array($job['items'] ?? null)) {
     throw new NotFoundHttpException();
 }
 
 $labels = [];
 foreach ($job['items'] as $itemtype => $ids) {
-    if (!QrCode::isSupported($itemtype) || !($item = getItemForItemtype($itemtype))) {
+    if (!is_string($itemtype) || !is_array($ids) || !QrCode::isSupported($itemtype) || !($item = getItemForItemtype($itemtype))) {
         continue;
     }
     foreach ($ids as $id) {
+        // Same limit as the massive action, in case the session holds more
+        if (count($labels) >= QrCode::PRINT_MAX_ITEMS) {
+            break 2;
+        }
         // Rights may have changed since the massive action: skip what is no longer readable
-        if (!$item->getFromDB((int) $id) || !$item->can((int) $id, READ)) {
+        $id = filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        if ($id === false || !$item->getFromDB($id) || !$item->can($id, READ)) {
             continue;
         }
         $text  = QrCode::buildText($item);
@@ -66,10 +73,20 @@ foreach ($job['items'] as $itemtype => $ids) {
     }
 }
 
+// Standalone page: only its own script, inline styles and the QR codes as data: images; no framing by other sites
+header("Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src data:;"
+    . " base-uri 'none'; form-action 'none'; frame-ancestors 'self'");
+header('X-Frame-Options: SAMEORIGIN');
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: same-origin');
+
+$back = $job['back'] ?? null;
+
 TemplateRenderer::getInstance()->display('@assetqr/print.html.twig', [
     'lang'    => substr($_SESSION['glpilanguage'] ?? 'en', 0, 2),
     'labels'  => $labels,
     'settings' => QrCode::getLabelSettings(),
-    'back'    => $job['back'] ?? $CFG_GLPI['url_base'],
+    // Stored by QrCode::getLocalBackUrl(): always a path inside GLPI
+    'back'     => is_string($back) && str_starts_with($back, '/') && !str_starts_with($back, '//') ? $back : $CFG_GLPI['root_doc'] . '/',
     'script'  => $CFG_GLPI['root_doc'] . '/plugins/assetqr/js/print.js?v=' . PLUGIN_ASSETQR_VERSION,
 ]);

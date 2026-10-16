@@ -27,7 +27,7 @@ Manufacturer: {manufacturers_id}
 
 In the asset lists, select assets and choose the massive action **Print QR codes**. A print page opens with one
 label (QR code + encoded text) per asset, and the browser's print dialog opens right away.
-Assets the user may not read are skipped and counted as rights problems.
+Assets the user may not read are skipped and counted as rights problems. At most 500 assets can be printed at once.
 
 The labels are configured in the plugin configuration (section *Labels*): label width and height
 (height 0 = as high as the content), QR code size, font size, gap between labels, position of the text

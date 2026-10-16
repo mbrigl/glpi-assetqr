@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assetqr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 09:48+0000\n"
+"POT-Creation-Date: 2026-10-16 09:52+0000\n"
 "PO-Revision-Date: 2026-10-05 18:16+0000\n"
 "Last-Translator: Markus Brigl\n"
 "Language-Team: none\n"
@@ -26,7 +26,7 @@ msgstr "A template must not be longer than %d characters."
 msgid "The label sizes are invalid."
 msgstr "The label sizes are invalid."
 
-#: front/config.form.php:95 src/QrCode.php:240
+#: front/config.form.php:95 src/QrCode.php:243
 msgid "QR code"
 msgstr "QR code"
 
@@ -34,18 +34,23 @@ msgstr "QR code"
 msgid "Print QR codes"
 msgstr "Print QR codes"
 
-#: src/QrCode.php:87
+#: src/QrCode.php:90
 msgid "Serial number"
 msgstr "Serial number"
 
-#: src/QrCode.php:88
+#: src/QrCode.php:91
 msgid "Inventory number"
 msgstr "Inventory number"
 
-#: src/QrCode.php:258 templates/print.html.twig:62
+#: src/QrCode.php:261 templates/print.html.twig:62
 #: templates/qrcode.html.twig:48
 msgid "Print"
 msgstr "Print"
+
+#: src/QrCode.php:281
+#, php-format
+msgid "Too many assets selected: at most %d QR codes can be printed at once."
+msgstr "Too many assets selected: at most %d QR codes can be printed at once."
 
 #: templates/config.html.twig:34
 msgid "QR code templates"

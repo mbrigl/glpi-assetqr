@@ -61,6 +61,9 @@ class QrCode
     /** Session key of the selection handed over to the print page. */
     public const PRINT_SESSION_KEY = 'plugin_assetqr_print';
 
+    /** Maximum number of assets printed at once; every QR code is generated when the page is rendered. */
+    public const PRINT_MAX_ITEMS = 500;
+
     /**
      * Numeric label settings of the print page: config key => [default, min, max].
      * Sizes in mm, font size in pt; a height of 0 means "as high as the content".
@@ -77,7 +80,7 @@ class QrCode
     public const LABEL_LAYOUTS = ['below', 'beside', 'none'];
 
     /** Columns that must never be encoded, whatever the template says. */
-    private const SENSITIVE_COLUMN_PATTERN = '/pass|secret|token|private|api_?key|cookie/i';
+    private const SENSITIVE_COLUMN_PATTERN = '/pass|secret|token|private|api_?key|cookie|hash|salt|credential/i';
 
     /** Default template, with labels in the current user's language. */
     public static function getDefaultTemplate(): string
@@ -272,6 +275,16 @@ class QrCode
             return;
         }
 
+        $selected = array_sum(array_map('count', $ma->getItems()));
+        if ($selected > self::PRINT_MAX_ITEMS) {
+            $ma->addMessage(sprintf(
+                __('Too many assets selected: at most %d QR codes can be printed at once.', 'assetqr'),
+                self::PRINT_MAX_ITEMS,
+            ));
+            $ma->itemDone($item::class, array_map('intval', $ids), MassiveAction::ACTION_KO);
+            return;
+        }
+
         $readable = $denied = [];
         foreach ($ids as $id) {
             if (self::isSupported($item) && $item->can($id, READ)) {
@@ -287,7 +300,7 @@ class QrCode
         $_SESSION[self::PRINT_SESSION_KEY] = [
             $token => [
                 'items' => $ma->getItems(),
-                'back'  => Html::getBackUrl(),
+                'back'  => self::getLocalBackUrl(),
             ],
         ];
         $ma->setRedirect(self::getPrintUrl($token));
@@ -299,6 +312,24 @@ class QrCode
         if ($readable !== []) {
             $ma->itemDone($item::class, $readable, MassiveAction::ACTION_OK);
         }
+    }
+
+    /**
+     * Previous page as a path inside GLPI (never another host), for the "Back" link of the print page.
+     */
+    public static function getLocalBackUrl(): string
+    {
+        global $CFG_GLPI;
+
+        $root    = $CFG_GLPI['root_doc'];
+        $referer = Html::getRefererUrl() ?? '';
+        $path    = parse_url($referer, PHP_URL_PATH);
+        $query   = parse_url($referer, PHP_URL_QUERY);
+
+        if (!is_string($path) || !str_starts_with($path, $root . '/') || str_starts_with($path, '//')) {
+            return $root . '/';
+        }
+        return $path . (is_string($query) && $query !== '' ? '?' . $query : '');
     }
 
     public static function getPrintUrl(string $token): string

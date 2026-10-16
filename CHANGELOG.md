@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - The "Print" button was not translated (GLPI core has no translation for it).
 
+### Security
+- Print page: Content Security Policy, no framing by other sites, "Back" link restricted to paths inside GLPI.
+- At most 500 assets per print job; the print token and the stored selection are validated strictly.
+- Columns containing `hash`, `salt` or `credential` are never encoded.
+
 ## [0.1.0] - 2026-10-05
 
 ### Added
