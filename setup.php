@@ -46,6 +46,9 @@ function plugin_init_assetqr(): void
     $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['assetqr'] = [QrCode::class, 'postItemForm'];
     $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['assetqr'] = ['js/qrcode.js'];
 
+    // Massive action "Print QR codes" in the asset lists (see plugin_assetqr_MassiveActions())
+    $PLUGIN_HOOKS[Hooks::USE_MASSIVE_ACTION]['assetqr'] = true;
+
     if (Session::haveRight('config', UPDATE)) {
         $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['assetqr'] = 'front/config.form.php';
     }

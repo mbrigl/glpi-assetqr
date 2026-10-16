@@ -23,6 +23,12 @@ Manufacturer: {manufacturers_id}
 - `{id}`, `{itemtype}`, `{url}`, `{entity}`: extra values
 - Lines that are empty after substitution are dropped
 
+## Feature: print QR codes of several assets
+
+In the asset lists, select assets and choose the massive action **Print QR codes**. A print page opens with one
+label (QR code + encoded text) per asset, and the browser's print dialog opens right away.
+Assets the user may not read are skipped and counted as rights problems.
+
 ## Translations
 Languages: German (`de_DE`), English (`en_GB`), Spanish (`es_ES`), French (`fr_FR`), Italian (`it_IT`).
 Source strings are English and always use the plugin domain: `__('Text', 'assetqr')`.

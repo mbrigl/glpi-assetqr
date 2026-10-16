@@ -43,6 +43,20 @@ function plugin_assetqr_install(): bool
 }
 
 /**
+ * Massive actions added to the lists of an itemtype.
+ */
+function plugin_assetqr_MassiveActions(string $itemtype): array
+{
+    if (!QrCode::isSupported($itemtype)) {
+        return [];
+    }
+    return [
+        QrCode::class . MassiveAction::CLASS_ACTION_SEPARATOR . QrCode::MASSIVE_ACTION_PRINT
+            => '<i class="ti ti-qrcode"></i>' . __s('Print QR codes', 'assetqr'),
+    ];
+}
+
+/**
  * Uninstallation: remove everything again.
  */
 function plugin_assetqr_uninstall(): bool

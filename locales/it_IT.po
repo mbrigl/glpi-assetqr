@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assetqr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-05 19:17+0000\n"
+"POT-Creation-Date: 2026-10-16 09:28+0000\n"
 "PO-Revision-Date: 2026-10-05 18:16+0000\n"
 "Last-Translator: Markus Brigl\n"
 "Language-Team: none\n"
@@ -22,17 +22,26 @@ msgstr ""
 msgid "A template must not be longer than %d characters."
 msgstr "Un modello non può superare %d caratteri."
 
-#: front/config.form.php:80 src/QrCode.php:190
+#: front/config.form.php:80 src/QrCode.php:198
 msgid "QR code"
 msgstr "Codice QR"
 
-#: src/QrCode.php:64
+#: hook.php:55
+msgid "Print QR codes"
+msgstr "Stampa codici QR"
+
+#: src/QrCode.php:72
 msgid "Serial number"
 msgstr "Numero di serie"
 
-#: src/QrCode.php:65
+#: src/QrCode.php:73
 msgid "Inventory number"
 msgstr "Numero di inventario"
+
+#: src/QrCode.php:216 templates/print.html.twig:58
+#: templates/qrcode.html.twig:48
+msgid "Print"
+msgstr "Stampa"
 
 #: templates/config.html.twig:34
 msgid "QR code templates"
@@ -63,7 +72,22 @@ msgstr "Modello proprio"
 msgid "Available placeholders:"
 msgstr "Segnaposto disponibili:"
 
-#: templates/qrcode.html.twig:32
+#: templates/print.html.twig:34
+msgid "QR codes"
+msgstr "Codici QR"
+
+#: templates/print.html.twig:55
+#, python-format
+msgid "%d QR code"
+msgid_plural "%d QR codes"
+msgstr[0] "%d codice QR"
+msgstr[1] "%d codici QR"
+
+#: templates/print.html.twig:63
+msgid "No asset to print."
+msgstr "Nessun asset da stampare."
+
+#: templates/print.html.twig:69 templates/qrcode.html.twig:32
 msgid "QR code could not be generated:"
 msgstr "Impossibile generare il codice QR:"
 

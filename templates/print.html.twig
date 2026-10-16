@@ -1,0 +1,81 @@
+{#
+ # -------------------------------------------------------------------------
+ # Asset QR Codes plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of Asset QR Codes.
+ #
+ # Asset QR Codes is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # Asset QR Codes is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with Asset QR Codes. If not, see <https://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2026 by Markus Brigl.
+ # @license   GPLv3+ https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://github.com/mbrigl/glpi-assetqr
+ # -------------------------------------------------------------------------
+ #}
+
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ __('QR codes', 'assetqr') }}</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; color: #000; background: #fff; }
+        .toolbar { display: flex; align-items: center; gap: .5em; padding: .75em 1em; border-bottom: 1px solid #ccc; background: #f6f8fb; }
+        .toolbar .count { margin-right: auto; }
+        .toolbar a, .toolbar button { font: inherit; padding: .4em .9em; border: 1px solid #888; border-radius: 4px; background: #fff; color: inherit; text-decoration: none; cursor: pointer; }
+        .toolbar button { background: #206bc4; border-color: #206bc4; color: #fff; }
+        .empty { padding: 2em 1em; }
+        .labels { display: flex; flex-wrap: wrap; gap: 4mm; padding: 4mm; }
+        .label { width: 60mm; padding: 3mm; border: 1px dashed #bbb; box-sizing: border-box; break-inside: avoid; page-break-inside: avoid; text-align: center; }
+        .label img { width: 40mm; height: auto; }
+        .label pre { margin: 2mm 0 0; font-size: 8pt; text-align: left; white-space: pre-wrap; overflow-wrap: anywhere; }
+        .label .error { color: #b00; font-size: 9pt; }
+        @media print {
+            .toolbar { display: none; }
+            .labels { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <span class="count">{{ _n('%d QR code', '%d QR codes', labels|length, 'assetqr')|format(labels|length) }}</span>
+        <a href="{{ back }}">{{ __('Back') }}</a>
+        {% if labels is not empty %}
+            <button type="button" id="assetqr-print">{{ __('Print', 'assetqr') }}</button>
+        {% endif %}
+    </div>
+
+    {% if labels is empty %}
+        <p class="empty">{{ __('No asset to print.', 'assetqr') }}</p>
+    {% else %}
+        <div class="labels">
+            {% for label in labels %}
+                <div class="label">
+                    {% if label.error %}
+                        <div class="error">{{ __('QR code could not be generated:', 'assetqr') }} {{ label.error }}</div>
+                    {% else %}
+                        {# SVG embedded as an image: markup inside it can never be interpreted by the page #}
+                        <img src="data:image/svg+xml;base64,{{ label.svg }}" alt="" />
+                    {% endif %}
+                    <pre>{{ label.text }}</pre>
+                </div>
+            {% endfor %}
+        </div>
+        <script src="{{ script }}"></script>
+    {% endif %}
+</body>
+</html>

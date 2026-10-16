@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Massive action "Print QR codes": prints the QR codes of all selected assets on one page.
+
+### Fixed
+- The "Print" button was not translated (GLPI core has no translation for it).
+
 ## [0.1.0] - 2026-10-05
 
 ### Added

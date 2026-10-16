@@ -12,9 +12,10 @@ LANGS=(de_DE en_GB es_ES fr_FR it_IT)
 POT="locales/$DOMAIN.pot"
 
 # Only calls that pass the plugin domain (last argument) are extracted;
-# core strings such as __('Print') are translated by GLPI itself.
+# core strings such as __('Back') are translated by GLPI itself.
 KEYWORDS=(
   --keyword=__:1,2t
+  --keyword=__s:1,2t
   --keyword=_x:1c,2,3t
   --keyword=_sx:1c,2,3t
   --keyword=_n:1,2,4t

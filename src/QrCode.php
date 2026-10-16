@@ -35,6 +35,8 @@ use Com\Tecnick\Barcode\Barcode;
 use Config;
 use Dropdown;
 use Entity;
+use Html;
+use MassiveAction;
 
 /**
  * Generates QR codes for assets from a configurable text template.
@@ -52,6 +54,12 @@ class QrCode
 
     /** Maximum length of a template; a QR code holds about 2300 characters at most. */
     public const TEMPLATE_MAX_LENGTH = 2000;
+
+    /** Name of the massive action that prints the QR codes of the selected assets. */
+    public const MASSIVE_ACTION_PRINT = 'print';
+
+    /** Session key of the selection handed over to the print page. */
+    public const PRINT_SESSION_KEY = 'plugin_assetqr_print';
 
     /** Columns that must never be encoded, whatever the template says. */
     private const SENSITIVE_COLUMN_PATTERN = '/pass|secret|token|private|api_?key|cookie/i';
@@ -198,5 +206,63 @@ class QrCode
             htmlescape(sprintf('%s – %s', $label, $item->getNameID())),
             htmlescape($label),
         );
+    }
+
+    public static function showMassiveActionsSubForm(MassiveAction $ma): bool
+    {
+        if ($ma->getAction() !== self::MASSIVE_ACTION_PRINT) {
+            return false;
+        }
+        echo Html::submit(__('Print', 'assetqr'), [
+            'name'  => 'massiveaction',
+            'icon'  => 'ti ti-printer',
+            'class' => 'btn btn-sm btn-primary',
+        ]);
+        return true;
+    }
+
+    /**
+     * Hands the selection over to the print page via the session; the page redirects there afterwards.
+     */
+    public static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids): void
+    {
+        if ($ma->getAction() !== self::MASSIVE_ACTION_PRINT) {
+            return;
+        }
+
+        $readable = $denied = [];
+        foreach ($ids as $id) {
+            if (self::isSupported($item) && $item->can($id, READ)) {
+                $readable[] = (int) $id;
+            } else {
+                $denied[] = (int) $id;
+            }
+        }
+
+        // The whole selection (all itemtypes) is stored on every call: this way nothing is lost when
+        // GLPI reloads the page during processing. The print page checks the rights again.
+        $token = bin2hex(random_bytes(16));
+        $_SESSION[self::PRINT_SESSION_KEY] = [
+            $token => [
+                'items' => $ma->getItems(),
+                'back'  => Html::getBackUrl(),
+            ],
+        ];
+        $ma->setRedirect(self::getPrintUrl($token));
+
+        // Last: itemDone() may reload the page when processing takes too long
+        if ($denied !== []) {
+            $ma->itemDone($item::class, $denied, MassiveAction::ACTION_NORIGHT);
+        }
+        if ($readable !== []) {
+            $ma->itemDone($item::class, $readable, MassiveAction::ACTION_OK);
+        }
+    }
+
+    public static function getPrintUrl(string $token): string
+    {
+        global $CFG_GLPI;
+
+        return $CFG_GLPI['root_doc'] . '/plugins/assetqr/front/print.php?token=' . urlencode($token);
     }
 }
