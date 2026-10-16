@@ -61,6 +61,21 @@ class QrCode
     /** Session key of the selection handed over to the print page. */
     public const PRINT_SESSION_KEY = 'plugin_assetqr_print';
 
+    /**
+     * Numeric label settings of the print page: config key => [default, min, max].
+     * Sizes in mm, font size in pt; a height of 0 means "as high as the content".
+     */
+    public const LABEL_NUMBERS = [
+        'label_width'     => [60, 15, 200],
+        'label_height'    => [0, 0, 300],
+        'label_qr_size'   => [40, 8, 150],
+        'label_font_size' => [8, 4, 16],
+        'label_gap'       => [4, 0, 30],
+    ];
+
+    /** Position of the text relative to the QR code; the first one is the default. */
+    public const LABEL_LAYOUTS = ['below', 'beside', 'none'];
+
     /** Columns that must never be encoded, whatever the template says. */
     private const SENSITIVE_COLUMN_PATTERN = '/pass|secret|token|private|api_?key|cookie/i';
 
@@ -98,6 +113,33 @@ class QrCode
             $template = trim($config['template_default'] ?? '');
         }
         return $template !== '' ? $template : self::getDefaultTemplate();
+    }
+
+    /**
+     * Label settings of the print page, falling back to the defaults for missing or invalid values.
+     *
+     * @return array{label_width: int, label_height: int, label_qr_size: int, label_font_size: int, label_gap: int, label_layout: string, label_border: bool}
+     */
+    public static function getLabelSettings(?array $values = null): array
+    {
+        $values ??= Config::getConfigurationValues(self::CONFIG_CONTEXT);
+
+        $settings = [];
+        foreach (self::LABEL_NUMBERS as $key => [$default]) {
+            $settings[$key] = self::parseLabelNumber($key, $values[$key] ?? null) ?? $default;
+        }
+        $layout = $values['label_layout'] ?? null;
+        $settings['label_layout'] = in_array($layout, self::LABEL_LAYOUTS, true) ? $layout : self::LABEL_LAYOUTS[0];
+        $settings['label_border'] = (bool) ($values['label_border'] ?? true);
+        return $settings;
+    }
+
+    /** Integer value of a numeric label setting, or null when it is not a number within its range. */
+    public static function parseLabelNumber(string $key, mixed $value): ?int
+    {
+        [, $min, $max] = self::LABEL_NUMBERS[$key];
+        $value = filter_var($value, FILTER_VALIDATE_INT, ['options' => ['min_range' => $min, 'max_range' => $max]]);
+        return $value === false ? null : $value;
     }
 
     /** Replaces the template placeholders with the asset values. */

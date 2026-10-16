@@ -71,6 +71,58 @@
                 {% endfor %}
             </div>
         </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3 class="card-title"><i class="ti ti-printer me-2"></i>{{ __('Labels', 'assetqr') }}</h3>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">
+                {{ __('Layout of the labels when printing the QR codes of several assets (massive action "Print QR codes").', 'assetqr') }}
+            </p>
+
+            {% set number_fields = [
+                {key: 'label_width', label: __('Label width', 'assetqr'), unit: 'mm'},
+                {key: 'label_height', label: __('Label height', 'assetqr'), unit: 'mm', hint: __('0 = as high as the content', 'assetqr')},
+                {key: 'label_qr_size', label: __('QR code size', 'assetqr'), unit: 'mm'},
+                {key: 'label_font_size', label: __('Font size', 'assetqr'), unit: 'pt'},
+                {key: 'label_gap', label: __('Gap between labels', 'assetqr'), unit: 'mm'},
+            ] %}
+            <div class="row g-3 mb-3">
+                {% for field in number_fields %}
+                    <div class="col-sm-6 col-lg-4">
+                        <label class="form-label" for="{{ field.key }}">{{ field.label }}</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="{{ field.key }}" name="{{ field.key }}" required
+                                value="{{ label[field.key] }}" min="{{ label_numbers[field.key][1] }}" max="{{ label_numbers[field.key][2] }}" step="1" />
+                            <span class="input-group-text">{{ field.unit }}</span>
+                        </div>
+                        {% if field.hint is defined %}
+                            <div class="form-hint">{{ field.hint }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="col-sm-6 col-lg-4">
+                    <label class="form-label" for="label_layout">{{ __('Text', 'assetqr') }}</label>
+                    <select class="form-select" id="label_layout" name="label_layout">
+                        {% for value, text in {
+                            below: __('Below the QR code', 'assetqr'),
+                            beside: __('Beside the QR code', 'assetqr'),
+                            none: __('No text', 'assetqr'),
+                        } %}
+                            <option value="{{ value }}" {{ label.label_layout == value ? 'selected' }}>{{ text }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <label class="form-check form-switch">
+                <input type="hidden" name="label_border" value="0" />
+                <input class="form-check-input" type="checkbox" name="label_border" value="1" {{ label.label_border ? 'checked' }} />
+                <span class="form-check-label">{{ __('Print cutting frame', 'assetqr') }}</span>
+            </label>
+        </div>
         <div class="card-footer d-flex flex-row-reverse">
             <button type="submit" name="update" value="1" class="btn btn-primary">
                 <i class="ti ti-device-floppy"></i>

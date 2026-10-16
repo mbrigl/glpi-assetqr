@@ -69,6 +69,7 @@ foreach ($job['items'] as $itemtype => $ids) {
 TemplateRenderer::getInstance()->display('@assetqr/print.html.twig', [
     'lang'    => substr($_SESSION['glpilanguage'] ?? 'en', 0, 2),
     'labels'  => $labels,
+    'settings' => QrCode::getLabelSettings(),
     'back'    => $job['back'] ?? $CFG_GLPI['url_base'],
     'script'  => $CFG_GLPI['root_doc'] . '/plugins/assetqr/js/print.js?v=' . PLUGIN_ASSETQR_VERSION,
 ]);

@@ -52,12 +52,27 @@ if (isset($_POST['update'])) {
     }
 
     $too_long = array_filter($values, fn(string $value) => mb_strlen($value) > QrCode::TEMPLATE_MAX_LENGTH);
+
+    // Label settings of the print page
+    $invalid_numbers = [];
+    foreach (array_keys(QrCode::LABEL_NUMBERS) as $key) {
+        $values[$key] = QrCode::parseLabelNumber($key, $_POST[$key] ?? null);
+        if ($values[$key] === null) {
+            $invalid_numbers[] = $key;
+        }
+    }
+    $layout                 = $_POST['label_layout'] ?? null;
+    $values['label_layout'] = in_array($layout, QrCode::LABEL_LAYOUTS, true) ? $layout : QrCode::LABEL_LAYOUTS[0];
+    $values['label_border'] = empty($_POST['label_border']) ? 0 : 1;
+
     if ($too_long !== []) {
         Session::addMessageAfterRedirect(
             sprintf(__('A template must not be longer than %d characters.', 'assetqr'), QrCode::TEMPLATE_MAX_LENGTH),
             false,
             ERROR,
         );
+    } elseif ($invalid_numbers !== []) {
+        Session::addMessageAfterRedirect(__('The label sizes are invalid.', 'assetqr'), false, ERROR);
     } else {
         Config::setConfigurationValues(QrCode::CONFIG_CONTEXT, $values);
         Session::addMessageAfterRedirect(__('Configuration updated successfully'));
@@ -83,5 +98,7 @@ TemplateRenderer::getInstance()->display('@assetqr/config.html.twig', [
     'max_length'       => QrCode::TEMPLATE_MAX_LENGTH,
     'template_default' => $config['template_default'] ?? QrCode::getDefaultTemplate(),
     'types'            => $types,
+    'label'            => QrCode::getLabelSettings($config),
+    'label_numbers'    => QrCode::LABEL_NUMBERS,
 ]);
 Html::footer();

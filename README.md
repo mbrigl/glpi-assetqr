@@ -29,6 +29,10 @@ In the asset lists, select assets and choose the massive action **Print QR codes
 label (QR code + encoded text) per asset, and the browser's print dialog opens right away.
 Assets the user may not read are skipped and counted as rights problems.
 
+The labels are configured in the plugin configuration (section *Labels*): label width and height
+(height 0 = as high as the content), QR code size, font size, gap between labels, position of the text
+(below / beside the QR code / no text) and an optional cutting frame.
+
 ## Translations
 Languages: German (`de_DE`), English (`en_GB`), Spanish (`es_ES`), French (`fr_FR`), Italian (`it_IT`).
 Source strings are English and always use the plugin domain: `__('Text', 'assetqr')`.
