@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-10
+
 ### Added
 - Support for GLPI 12.0 (GLPI 11.0 remains supported).
 
@@ -36,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   foreign keys are resolved to their names.
 - Translations: German, English, Spanish, French, Italian.
 
-[Unreleased]: https://github.com/mbrigl/glpi-assetqr/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/mbrigl/glpi-assetqr/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/mbrigl/glpi-assetqr/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/mbrigl/glpi-assetqr/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/mbrigl/glpi-assetqr/releases/tag/v0.1.0
