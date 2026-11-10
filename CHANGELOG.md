@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Configuration form: the CSRF token is only sent on GLPI 11; GLPI 12 checks request headers instead.
 
+### Security
+- Custom assets: fields hidden for the active profile ("Hidden for these profiles") are no longer encoded.
+- The `custom_fields` column (raw JSON of all custom fields) is never encoded.
+- Texts longer than a QR code can hold are rejected before encoding.
+- Print page: the "Back" link rejects paths with backslashes or control characters (`/\host` is another host for browsers).
+
 ## [1.0.0] - 2026-10-16
 
 ### Added
