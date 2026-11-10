@@ -100,5 +100,7 @@ TemplateRenderer::getInstance()->display('@assetqr/config.html.twig', [
     'types'            => $types,
     'label'            => QrCode::getLabelSettings($config),
     'label_numbers'    => QrCode::LABEL_NUMBERS,
+    // GLPI 11 requires a CSRF token in POST forms; GLPI 12 checks request headers instead
+    'csrf_token_value' => version_compare(GLPI_VERSION, '12.0.0-dev', '<') ? Session::getNewCSRFToken() : null,
 ]);
 Html::footer();

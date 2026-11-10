@@ -1,10 +1,14 @@
 # Local overrides go into .devcontainer/.env (git-ignored):
 #   GLPI_PORT=8081      host port for GLPI (default 8080)
 #   GLPI_SEED_DATA=0    don't seed sample computers on container creation
+#   GLPI_VERSION=12.0.1 GLPI release to build the container with (default 11.0.11)
 
 services:
   glpi:
-    build: .
+    build:
+      context: .
+      args:
+        GLPI_VERSION: ${GLPI_VERSION:-11.0.11}
     # Explicit localhost/ prefix: Podman otherwise tags compose builds as
     # docker.io/library/..., which the devcontainer CLI can't find
     image: localhost/glpi-assetqr_devcontainer-glpi:latest

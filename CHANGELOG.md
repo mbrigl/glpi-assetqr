@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-10
+
+### Added
+- Support for GLPI 12.0 (GLPI 11.0 remains supported).
+
+### Changed
+- Configuration form: the CSRF token is only sent on GLPI 11; GLPI 12 checks request headers instead.
+
+### Security
+- Custom assets: fields hidden for the active profile ("Hidden for these profiles") are no longer encoded.
+- The `custom_fields` column (raw JSON of all custom fields) is never encoded.
+- Texts longer than a QR code can hold are rejected before encoding.
+- Print page: the "Back" link rejects paths with backslashes or control characters (`/\host` is another host for browsers).
+
 ## [1.0.0] - 2026-10-16
 
 ### Added
@@ -30,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   foreign keys are resolved to their names.
 - Translations: German, English, Spanish, French, Italian.
 
-[Unreleased]: https://github.com/mbrigl/glpi-assetqr/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/mbrigl/glpi-assetqr/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/mbrigl/glpi-assetqr/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/mbrigl/glpi-assetqr/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/mbrigl/glpi-assetqr/releases/tag/v0.1.0

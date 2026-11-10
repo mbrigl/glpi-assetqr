@@ -32,9 +32,12 @@ namespace GlpiPlugin\Assetqr;
 
 use CommonDBTM;
 use Com\Tecnick\Barcode\Barcode;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
 use Config;
 use Dropdown;
 use Entity;
+use Glpi\Asset\Asset;
+use Glpi\Asset\CustomFieldDefinition;
 use Html;
 use MassiveAction;
 
@@ -79,8 +82,17 @@ class QrCode
     /** Position of the text relative to the QR code; the first one is the default. */
     public const LABEL_LAYOUTS = ['below', 'beside', 'none'];
 
+    /** Maximum number of bytes a QR code holds at error correction level M (version 40, byte mode). */
+    public const QR_MAX_BYTES = 2331;
+
     /** Columns that must never be encoded, whatever the template says. */
     private const SENSITIVE_COLUMN_PATTERN = '/pass|secret|token|private|api_?key|cookie|hash|salt|credential/i';
+
+    /**
+     * Columns that are never encoded: custom_fields holds the raw JSON of all custom fields
+     * of a custom asset, including those hidden for the current profile.
+     */
+    private const EXCLUDED_COLUMNS = ['custom_fields'];
 
     /** Default template, with labels in the current user's language. */
     public static function getDefaultTemplate(): string
@@ -178,7 +190,7 @@ class QrCode
                 return html_entity_decode(trim($name), ENT_QUOTES);
         }
 
-        if (!self::isAllowedColumn($key) || !array_key_exists($key, $item->fields)) {
+        if (!self::isAllowedColumn($key) || !array_key_exists($key, $item->fields) || self::isHiddenForProfile($item, $key)) {
             return '';
         }
 
@@ -217,7 +229,36 @@ class QrCode
 
     private static function isAllowedColumn(string $column): bool
     {
-        return preg_match(self::SENSITIVE_COLUMN_PATTERN, $column) !== 1;
+        return !in_array($column, self::EXCLUDED_COLUMNS, true)
+            && preg_match(self::SENSITIVE_COLUMN_PATTERN, $column) !== 1;
+    }
+
+    /**
+     * Whether a field of a custom asset is hidden for the active profile ("Hidden for these profiles"
+     * in the asset definition). Same check as Glpi\Asset\Asset::showForm().
+     */
+    private static function isHiddenForProfile(CommonDBTM $item, string $column): bool
+    {
+        if (!$item instanceof Asset) {
+            return false;
+        }
+
+        $definition = $item::getDefinition();
+        $core_field = $definition->getAllFields()[$column] ?? null;
+        if ($core_field === null) {
+            return false;
+        }
+        foreach ($definition->getDecodedFieldsField() as $field) {
+            if (($field['key'] ?? null) !== $column) {
+                continue;
+            }
+            $custom_field                          = new CustomFieldDefinition();
+            $custom_field->fields['system_name']   = $column;
+            $custom_field->fields['type']          = $core_field['type'];
+            $custom_field->fields['field_options'] = $field['field_options'] ?? [];
+            return ($custom_field->getFieldType()->getOptionValues()['hidden'] ?? false) === true;
+        }
+        return false;
     }
 
     /**
@@ -225,6 +266,14 @@ class QrCode
      */
     public static function generate(string $text)
     {
+        // Fail fast instead of letting the library encode an oversized text (e.g. a long comment)
+        if (strlen($text) > self::QR_MAX_BYTES) {
+            throw new BarcodeException(sprintf(
+                __('The text is too long for a QR code (%1$d bytes, at most %2$d).', 'assetqr'),
+                strlen($text),
+                self::QR_MAX_BYTES,
+            ));
+        }
         return (new Barcode())
             ->getBarcodeObj('QRCODE,M', $text, -6, -6, 'black', [4, 4, 4, 4])
             ->setBackgroundColor('white');
@@ -326,10 +375,22 @@ class QrCode
         $path    = parse_url($referer, PHP_URL_PATH);
         $query   = parse_url($referer, PHP_URL_QUERY);
 
-        if (!is_string($path) || !str_starts_with($path, $root . '/') || str_starts_with($path, '//')) {
+        if (!is_string($path) || !str_starts_with($path, $root . '/')) {
             return $root . '/';
         }
-        return $path . (is_string($query) && $query !== '' ? '?' . $query : '');
+        $url = $path . (is_string($query) && $query !== '' ? '?' . $query : '');
+        return self::isLocalPath($url) ? $url : $root . '/';
+    }
+
+    /**
+     * Whether a URL is a path on this host: browsers treat "//host" and "/\host" as other hosts
+     * and ignore tabs and line breaks inside URLs.
+     */
+    public static function isLocalPath(string $url): bool
+    {
+        return str_starts_with($url, '/')
+            && !str_starts_with($url, '//')
+            && preg_match('/[\\\\\x00-\x1f\x7f]/', $url) !== 1;
     }
 
     public static function getPrintUrl(string $token): string

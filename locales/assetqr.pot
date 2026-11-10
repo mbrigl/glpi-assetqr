@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assetqr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 09:52+0000\n"
+"POT-Creation-Date: 2026-11-10 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "The label sizes are invalid."
 msgstr ""
 
-#: front/config.form.php:95 src/QrCode.php:243
+#: front/config.form.php:95 src/QrCode.php:292
 msgid "QR code"
 msgstr ""
 
@@ -35,102 +35,107 @@ msgstr ""
 msgid "Print QR codes"
 msgstr ""
 
-#: src/QrCode.php:90
+#: src/QrCode.php:102
 msgid "Serial number"
 msgstr ""
 
-#: src/QrCode.php:91
+#: src/QrCode.php:103
 msgid "Inventory number"
 msgstr ""
 
-#: src/QrCode.php:261 templates/print.html.twig:62
+#: src/QrCode.php:272
+#, php-format
+msgid "The text is too long for a QR code (%1$d bytes, at most %2$d)."
+msgstr ""
+
+#: src/QrCode.php:310 templates/print.html.twig:62
 #: templates/qrcode.html.twig:48
 msgid "Print"
 msgstr ""
 
-#: src/QrCode.php:281
+#: src/QrCode.php:330
 #, php-format
 msgid "Too many assets selected: at most %d QR codes can be printed at once."
 msgstr ""
 
-#: templates/config.html.twig:34
+#: templates/config.html.twig:37
 msgid "QR code templates"
 msgstr ""
 
-#: templates/config.html.twig:38
+#: templates/config.html.twig:41
 #, python-brace-format
 msgid "Placeholders in curly braces are replaced by the asset values, e.g. {name}, {serial}. Foreign keys such as {manufacturers_id} or {users_id} are resolved to their names. Additionally available: {id}, {itemtype}, {url}, {entity}. Empty lines are removed."
 msgstr ""
 
-#: templates/config.html.twig:41
+#: templates/config.html.twig:44
 msgid "Default template"
 msgstr ""
 
-#: templates/config.html.twig:43
+#: templates/config.html.twig:46
 msgid "Used for all asset types without their own template."
 msgstr ""
 
-#: templates/config.html.twig:45
+#: templates/config.html.twig:48
 msgid "Empty = use default template"
 msgstr ""
 
-#: templates/config.html.twig:54
+#: templates/config.html.twig:57
 msgid "Own template"
 msgstr ""
 
-#: templates/config.html.twig:63
+#: templates/config.html.twig:66
 msgid "Available placeholders:"
 msgstr ""
 
-#: templates/config.html.twig:78
+#: templates/config.html.twig:81
 msgid "Labels"
 msgstr ""
 
-#: templates/config.html.twig:82
+#: templates/config.html.twig:85
 msgid "Layout of the labels when printing the QR codes of several assets (massive action \"Print QR codes\")."
 msgstr ""
 
-#: templates/config.html.twig:86
+#: templates/config.html.twig:89
 msgid "Label width"
 msgstr ""
 
-#: templates/config.html.twig:87
+#: templates/config.html.twig:90
 msgid "0 = as high as the content"
 msgstr ""
 
-#: templates/config.html.twig:87
+#: templates/config.html.twig:90
 msgid "Label height"
 msgstr ""
 
-#: templates/config.html.twig:88
+#: templates/config.html.twig:91
 msgid "QR code size"
 msgstr ""
 
-#: templates/config.html.twig:89
+#: templates/config.html.twig:92
 msgid "Font size"
 msgstr ""
 
-#: templates/config.html.twig:90
+#: templates/config.html.twig:93
 msgid "Gap between labels"
 msgstr ""
 
-#: templates/config.html.twig:107
+#: templates/config.html.twig:110
 msgid "Text"
 msgstr ""
 
-#: templates/config.html.twig:110
+#: templates/config.html.twig:113
 msgid "Below the QR code"
 msgstr ""
 
-#: templates/config.html.twig:111
+#: templates/config.html.twig:114
 msgid "Beside the QR code"
 msgstr ""
 
-#: templates/config.html.twig:112
+#: templates/config.html.twig:115
 msgid "No text"
 msgstr ""
 
-#: templates/config.html.twig:123
+#: templates/config.html.twig:126
 msgid "Print cutting frame"
 msgstr ""
 

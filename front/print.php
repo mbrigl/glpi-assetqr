@@ -87,6 +87,6 @@ TemplateRenderer::getInstance()->display('@assetqr/print.html.twig', [
     'labels'  => $labels,
     'settings' => QrCode::getLabelSettings(),
     // Stored by QrCode::getLocalBackUrl(): always a path inside GLPI
-    'back'     => is_string($back) && str_starts_with($back, '/') && !str_starts_with($back, '//') ? $back : $CFG_GLPI['root_doc'] . '/',
+    'back'     => is_string($back) && QrCode::isLocalPath($back) ? $back : $CFG_GLPI['root_doc'] . '/',
     'script'  => $CFG_GLPI['root_doc'] . '/plugins/assetqr/js/print.js?v=' . PLUGIN_ASSETQR_VERSION,
 ]);

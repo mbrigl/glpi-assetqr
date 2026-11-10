@@ -1,6 +1,6 @@
 # Asset QR Codes for GLPI
 
-GLPI 11 plugin that adds a QR code button to every asset. The encoded text is built from a
+GLPI 11 and 12 plugin that adds a QR code button to every asset. The encoded text is built from a
 configurable template of asset fields.
 
 ## Feature: QR codes for assets
@@ -51,6 +51,12 @@ falls back to the system language and then to `en_GB`; regional variants (e.g. `
 2. After the first start: http://localhost:8080 (login `glpi` / `glpi`).
    If port 8080 is taken, put e.g. `GLPI_PORT=8081` into `.devcontainer/.env` and rebuild the container.
 3. The plugin lives at `/var/www/glpi/plugins/assetqr` and is installed and activated automatically.
+
+### Testing with another GLPI version
+The GLPI version is a build argument (default: 11.0.11). To test with GLPI 12, put e.g.
+`GLPI_VERSION=12.0.1` into `.devcontainer/.env` and rebuild the container. The database is not
+migrated automatically: either start from scratch (see below) or run
+`sudo -u www-data php /var/www/glpi/bin/console db:update` after the rebuild.
 
 ## Sample data
 ```bash
