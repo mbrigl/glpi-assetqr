@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Support for GLPI 12.0 (GLPI 11.0 remains supported).
+
+### Changed
+- Configuration form: the CSRF token is only sent on GLPI 11; GLPI 12 checks request headers instead.
+
 ## [1.0.0] - 2026-10-16
 
 ### Added
