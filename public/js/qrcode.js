@@ -28,6 +28,7 @@
 
 /* global CFG_GLPI, glpi_ajax_dialog, _ */
 
+// "Print" in the dialog is a plain link to front/print.php, which applies the label settings
 $(document).on('click', '.assetqr-qrcode-btn', function () {
     const btn = $(this);
     glpi_ajax_dialog({
@@ -40,38 +41,4 @@ $(document).on('click', '.assetqr-qrcode-btn', function () {
         // glpi_ajax_dialog inserts the title as HTML: escape the asset name
         title: _.escape(btn.attr('data-title')),
     });
-});
-
-$(document).on('click', '.assetqr-qrcode-print', function () {
-    const container = $(this).closest('.assetqr-qrcode');
-    const image = container.find('.assetqr-qrcode-image img').get(0);
-    if (!image) {
-        return;
-    }
-    const win = window.open('', '_blank', 'width=500,height=600');
-    if (!win) {
-        return;
-    }
-
-    // Build the print page from DOM nodes only, never from HTML strings
-    const doc = win.document;
-    doc.open();
-    doc.write('<!doctype html><html><head></head><body></body></html>');
-    doc.close();
-    doc.title = $(this).attr('data-title');
-
-    const style = doc.createElement('style');
-    style.textContent = 'body{font-family:sans-serif;text-align:center;margin:2em}'
-        + 'img{width:60mm;height:auto}pre{text-align:left;display:inline-block;white-space:pre-wrap}';
-    doc.head.append(style);
-
-    const img = doc.createElement('img');
-    const pre = doc.createElement('pre');
-    pre.textContent = container.find('pre').text();
-    img.addEventListener('load', () => {
-        win.focus();
-        win.print();
-    });
-    img.src = image.src;
-    doc.body.append(img, doc.createElement('br'), pre);
 });

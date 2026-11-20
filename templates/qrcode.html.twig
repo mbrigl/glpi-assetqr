@@ -43,10 +43,11 @@
                 <i class="ti ti-download"></i>
                 <span>{{ __('Download PNG', 'assetqr') }}</span>
             </a>
-            <button type="button" class="btn btn-outline-secondary assetqr-qrcode-print" data-title="{{ __('QR code', 'assetqr') }}">
+            {# Same print page as the massive action: uses the label settings of the configuration #}
+            <a class="btn btn-outline-secondary" href="{{ print_url }}" target="_blank" rel="noopener">
                 <i class="ti ti-printer"></i>
                 <span>{{ __('Print', 'assetqr') }}</span>
-            </button>
+            </a>
         </div>
     </div>
 {% endif %}

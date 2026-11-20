@@ -34,6 +34,8 @@ use Glpi\Exception\Http\BadRequestHttpException;
 use Glpi\Exception\Http\NotFoundHttpException;
 use GlpiPlugin\Assetqr\QrCode;
 
+global $CFG_GLPI;
+
 Session::checkLoginUser();
 
 $itemtype = $_GET['itemtype'] ?? null;
@@ -62,9 +64,12 @@ try {
 }
 
 TemplateRenderer::getInstance()->display('@assetqr/qrcode.html.twig', [
-    'text'     => $text,
-    'svg'      => $svg,
-    'png'      => $png,
-    'error'    => $error,
-    'filename' => preg_replace('/[^A-Za-z0-9._-]+/', '_', $item->getName() ?: ($item::getType() . '_' . $items_id)) . '.png',
+    'text'      => $text,
+    'svg'       => $svg,
+    'png'       => $png,
+    'error'     => $error,
+    'filename'  => preg_replace('/[^A-Za-z0-9._-]+/', '_', $item->getName() ?: ($item::getType() . '_' . $items_id)) . '.png',
+    // Same print page as the massive action, so the label settings of the configuration apply
+    'print_url' => $CFG_GLPI['root_doc'] . '/plugins/assetqr/front/print.php?'
+        . http_build_query(['itemtype' => $itemtype, 'items_id' => $items_id]),
 ]);

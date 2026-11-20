@@ -37,11 +37,24 @@ global $CFG_GLPI;
 
 Session::checkLoginUser();
 
-// Selection stored by the massive action "Print QR codes"
-$token = $_GET['token'] ?? null;
-$job   = is_string($token) && preg_match('/^[0-9a-f]{32}$/', $token) === 1
-    ? ($_SESSION[QrCode::PRINT_SESSION_KEY][$token] ?? null)
-    : null;
+if (isset($_GET['itemtype']) || isset($_GET['items_id'])) {
+    // Single asset: "Print" button of the QR code dialog
+    $itemtype = $_GET['itemtype'] ?? null;
+    $items_id = filter_var($_GET['items_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    if (!is_string($itemtype) || $items_id === false || !QrCode::isSupported($itemtype)) {
+        throw new NotFoundHttpException();
+    }
+    $job = [
+        'items' => [$itemtype => [$items_id]],
+        'back'  => $itemtype::getFormURLWithID($items_id),
+    ];
+} else {
+    // Selection stored by the massive action "Print QR codes"
+    $token = $_GET['token'] ?? null;
+    $job   = is_string($token) && preg_match('/^[0-9a-f]{32}$/', $token) === 1
+        ? ($_SESSION[QrCode::PRINT_SESSION_KEY][$token] ?? null)
+        : null;
+}
 if (!is_array($job) || !is_array($job['items'] ?? null)) {
     throw new NotFoundHttpException();
 }
@@ -86,7 +99,7 @@ TemplateRenderer::getInstance()->display('@assetqr/print.html.twig', [
     'lang'    => substr($_SESSION['glpilanguage'] ?? 'en', 0, 2),
     'labels'  => $labels,
     'settings' => QrCode::getLabelSettings(),
-    // Stored by QrCode::getLocalBackUrl(): always a path inside GLPI
+    // Massive action: stored by QrCode::getLocalBackUrl(); single asset: its form. Always a path inside GLPI
     'back'     => is_string($back) && QrCode::isLocalPath($back) ? $back : $CFG_GLPI['root_doc'] . '/',
     'script'  => $CFG_GLPI['root_doc'] . '/plugins/assetqr/js/print.js?v=' . PLUGIN_ASSETQR_VERSION,
 ]);

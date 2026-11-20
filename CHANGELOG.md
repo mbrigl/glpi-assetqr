@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- The "Print" button of the QR code dialog ignored the label settings (fixed 60 mm QR code):
+  it now opens the same print page as the massive action, for the single asset.
+
 ## [1.1.0] - 2026-11-10
 
 ### Added
